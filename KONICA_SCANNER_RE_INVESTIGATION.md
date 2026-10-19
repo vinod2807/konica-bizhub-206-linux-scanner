@@ -400,7 +400,13 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
 ### Remaining
 
 * ADF: set parameter byte 12 to 2 and verify the status byte
-  `[0x1006f2a1] & 1` indicates paper present. Not yet tested.
-* A3: paper code 0, window 7015×9921. Not yet tested.
+  `[0x1006f2a1] & 1` indicates paper present. A status query with the ADF
+  empty returned `ff 00 00 00 00 00 00 00 00 00`, so byte 7 is zero; load a
+  page and re-run `tools/ar206_test.py --stage status` before attempting a
+  full ADF scan.
+* A3: the A3 parameter block is accepted. Geometry with
+  `01 00 05 00 00 00 00 00 67 1b c1 26 00` returned
+  `00 10 60 13 b3 0d 60 13` (line 4096, height 4960, window 3507×4960).
+  A full A3 scan has not been run yet.
 * Simple Scan/SANE: the 206 is not visible to SANE. A `sane-ar206` backend
   would be needed for Simple Scan integration; the current tool is standalone.
