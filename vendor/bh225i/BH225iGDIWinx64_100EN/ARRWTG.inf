@@ -1,0 +1,306 @@
+; KONICA MINOLTA 205i/225i Scanner Driver
+; Copyright (c) 2019 KONICA MINOLTA
+
+[Version]
+Signature="$CHICAGO$"
+Class=Image
+ClassGUID={6bdd1fc6-810f-11d0-bec7-08002be2092f}
+Provider=%MFGName%
+DriverVer=05/31/2019,1.0.0.0
+CatalogFile=ARRWTG.cat
+
+[SourceDisksNames]
+1=%DISKName%,,,
+
+[SourceDisksFiles]
+ARR205i.ds = 1
+ARR225i.ds = 1
+ARRWT.chm = 1
+ARRWT.dll = 1
+DrvInfo.ini = 1
+SetupScan.dll = 1
+Uninstscan.exe = 1
+Uninstscan.dll = 1
+ScanCoInstall.dll = 1
+DIFxAPI.dll = 1
+
+;Vista
+W2205i.dll=1
+W2225i.dll=1
+
+WSD205i.dll=1
+WSD225i.dll=1
+
+[ControlFlags]
+ExcludeFromSelect=*
+
+[Manufacturer]
+%MFGName%=ONWT,NTamd64.5.1,NTamd64.6.0
+
+;2000
+[ONWT]
+%MODELName1%=T1WVM11, USB\VID_132B&PID_2381&MI_00
+%MODELName3%=T3WVM11, USB\VID_132B&PID_237f&MI_00
+
+%MODELNameA%=TAWVM11.NTamd64.6.0, UMB\WSDSCAN\KONICA-MINOLTA-205i
+%MODELNameC%=TCWVM11.NTamd64.6.0, UMB\WSDSCAN\KONICA-MINOLTA-225i
+
+;XP
+[ONWT.NTamd64.5.1]
+%MODELName1%=T1WVM11.NTamd64.5.1, USB\VID_132B&PID_2381&MI_00
+%MODELName3%=T3WVM11.NTamd64.5.1, USB\VID_132B&PID_237f&MI_00
+
+;Vista
+[ONWT.NTamd64.6.0]
+%MODELName1%=T1WVM11.NTamd64.6.0, USB\VID_132B&PID_2381&MI_00
+%MODELName3%=T3WVM11.NTamd64.6.0, USB\VID_132B&PID_237f&MI_00
+
+%MODELNameA%=TAWVM11.NTamd64.6.0, UMB\WSDSCAN\KONICA-MINOLTA-205i
+%MODELNameC%=TCWVM11.NTamd64.6.0, UMB\WSDSCAN\KONICA-MINOLTA-225i
+
+[DestinationDirs]
+ScannerDS1.CopyFiles = 10,twain_32\ARR205i
+ScannerDS3.CopyFiles = 10,twain_32\ARR225i
+WIA20Driver1.CopyFiles=11
+WIA20Driver3.CopyFiles=11
+CoInstall.CopyFiles=11
+
+WIA20DriverA.CopyFiles=11
+WIA20DriverC.CopyFiles=11
+
+[T1WVM11.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+[T3WVM11.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+
+[T1WVM11.NTamd64.5.1.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+[T3WVM11.NTamd64.5.1.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+
+[T1WVM11.NTamd64.6.0.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+[T3WVM11.NTamd64.6.0.CoInstallers]
+AddReg          = CoInstall.AddReg
+CopyFiles       = CoInstall.CopyFiles
+
+;2000
+[T1WVM11]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS1.CopyFiles
+AddReg=T1WVM11.AddReg
+[T3WVM11]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS3.CopyFiles
+AddReg=T3WVM11.AddReg
+
+;XP
+[T1WVM11.NTamd64.5.1]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS1.CopyFiles
+AddReg=T1WVM11.AddReg
+[T3WVM11.NTamd64.5.1]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS3.CopyFiles
+AddReg=T3WVM11.AddReg
+
+;Vista
+[T1WVM11.NTamd64.6.0]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS1.CopyFiles,WIA20Driver1.CopyFiles
+AddReg=T1WVM11.AddReg,WIA20Driver1.AddReg
+;forWIA
+PortSelect=no
+SubClass=StillImage
+DeviceType=1
+DeviceSubType=0x1
+Capabilities=0x30
+DeviceData=WIA20Driver1.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+[T3WVM11.NTamd64.6.0]
+Include=sti.inf
+Needs=STI.USBSection
+CopyFiles=ScannerDS3.CopyFiles,WIA20Driver3.CopyFiles
+AddReg=T3WVM11.AddReg,WIA20Driver3.AddReg
+;forWIA
+PortSelect=no
+SubClass=StillImage
+DeviceType=1
+DeviceSubType=0x1
+Capabilities=0x30
+DeviceData=WIA20Driver3.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+
+[TAWVM11.NTamd64.6.0]
+Include=sti.inf
+Needs=STI.WSDSection
+CopyFiles=WIA20DriverA.CopyFiles
+AddReg=WIA20DriverA.AddReg
+;forWIA
+PortSelect=no
+SubClass=StillImage
+DeviceType=1
+DeviceSubType=0x1
+Capabilities=0x30
+DeviceData=WIA20DriverA.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+[TCWVM11.NTamd64.6.0]
+Include=sti.inf
+Needs=STI.WSDSection
+CopyFiles=WIA20DriverC.CopyFiles
+AddReg=WIA20DriverC.AddReg
+;forWIA
+PortSelect=no
+SubClass=StillImage
+DeviceType=1
+DeviceSubType=0x1
+Capabilities=0x30
+DeviceData=WIA20DriverC.DeviceData
+ICMProfiles="sRGB Color Space Profile.icm"
+
+;2000
+[T1WVM11.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+[T3WVM11.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+
+;XP
+[T1WVM11.NTamd64.5.1.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+[T3WVM11.NTamd64.5.1.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+
+[TAWVM11.NTamd64.6.0.HW]
+Include=sti.inf
+Needs=STI.WSDSectionHW
+[TCWVM11.NTamd64.6.0.HW]
+Include=sti.inf
+Needs=STI.WSDSectionHW
+
+;Vista
+[T1WVM11.NTamd64.6.0.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+[T3WVM11.NTamd64.6.0.Services]
+Include=sti.inf
+Needs=STI.USBSection.Services
+
+[TAWVM11.NTamd64.6.0.Services]
+Include=sti.inf
+Needs=STI.WSDSection.Services
+[TCWVM11.NTamd64.6.0.Services]
+Include=sti.inf
+Needs=STI.WSDSection.Services
+
+;WIA2.0
+[WIA20Driver1.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+[WIA20Driver3.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+
+[WIA20DriverA.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+[WIA20DriverC.DeviceData]
+Server=local
+UI Class ID={4DB1AD10-3391-11D2-9A33-00C04FA36145}
+
+[T1WVM11.AddReg]
+HKR,,DevLoader,0,*ntkern
+HKR,,NTMPDriver,0,usbscan.sys
+HKLM,System\Currentcontrolset\Services\T1WVM11\Parameters,"MaximumTransferSize",0x10001,4096
+HKLM,System\Currentcontrolset\Services\T1WVM11\Parameters,"DebugLevel",0x10001,2
+[T3WVM11.AddReg]
+HKR,,DevLoader,0,*ntkern
+HKR,,NTMPDriver,0,usbscan.sys
+HKLM,System\Currentcontrolset\Services\T3WVM11\Parameters,"MaximumTransferSize",0x10001,4096
+HKLM,System\Currentcontrolset\Services\T3WVM11\Parameters,"DebugLevel",0x10001,2
+
+;WIA2.0
+[WIA20Driver1.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{5C4083E0-3403-4fe5-B8AE-9591C8612F7E}"
+HKCR,CLSID\{5C4083E0-3403-4fe5-B8AE-9591C8612F7E},,,"KONICA MINOLTA 205i Scanner WIA2.0 Driver"
+HKCR,CLSID\{5C4083E0-3403-4fe5-B8AE-9591C8612F7E}\InProcServer32,,,%11%\W2205i.dll
+HKCR,CLSID\{5C4083E0-3403-4fe5-B8AE-9591C8612F7E}\InProcServer32,ThreadingModel,,"Both"
+[WIA20Driver3.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{42BDFF43-8883-407b-A244-6EE6F24CAB41}"
+HKCR,CLSID\{42BDFF43-8883-407b-A244-6EE6F24CAB41},,,"KONICA MINOLTA 225i Scanner WIA2.0 Driver"
+HKCR,CLSID\{42BDFF43-8883-407b-A244-6EE6F24CAB41}\InProcServer32,,,%11%\W2225i.dll
+HKCR,CLSID\{42BDFF43-8883-407b-A244-6EE6F24CAB41}\InProcServer32,ThreadingModel,,"Both"
+
+[WIA20DriverA.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{5421903D-B28F-4346-A69F-0FE6FCC0F0BE}"
+HKCR,CLSID\{5421903D-B28F-4346-A69F-0FE6FCC0F0BE},,,"KONICA MINOLTA 205i WSD Scanner WIA2.0 Driver"
+HKCR,CLSID\{5421903D-B28F-4346-A69F-0FE6FCC0F0BE}\InProcServer32,,,%11%\WSD205i.dll
+HKCR,CLSID\{5421903D-B28F-4346-A69F-0FE6FCC0F0BE}\InProcServer32,ThreadingModel,,"Both"
+[WIA20DriverC.AddReg]
+HKR,,HardwareConfig,1,4
+HKR,,USDClass,,"{4F2FC5DC-17C1-4eea-A604-58E8438173A7}"
+HKCR,CLSID\{4F2FC5DC-17C1-4eea-A604-58E8438173A7},,,"KONICA MINOLTA 225i WSD Scanner WIA2.0 Driver"
+HKCR,CLSID\{4F2FC5DC-17C1-4eea-A604-58E8438173A7}\InProcServer32,,,%11%\WSD225i.dll
+HKCR,CLSID\{4F2FC5DC-17C1-4eea-A604-58E8438173A7}\InProcServer32,ThreadingModel,,"Both"
+
+[CoInstall.AddReg]
+HKR,,CoInstallers32,0x10000,"ScanCoInstall.dll,CoDeviceInstall"
+
+[ScannerDS1.CopyFiles]
+ARR205i.ds
+ARRWT.dll
+ARRWT.chm
+DrvInfo.ini
+SetupScan.dll
+Uninstscan.exe
+Uninstscan.dll
+DIFxAPI.dll
+[ScannerDS3.CopyFiles]
+ARR225i.ds
+ARRWT.dll
+ARRWT.chm
+DrvInfo.ini
+SetupScan.dll
+Uninstscan.exe
+Uninstscan.dll
+DIFxAPI.dll
+
+;Vista
+[WIA20Driver1.CopyFiles]
+W2205i.dll
+[WIA20Driver3.CopyFiles]
+W2225i.dll
+
+[WIA20DriverA.CopyFiles]
+WSD205i.dll
+[WIA20DriverC.CopyFiles]
+WSD225i.dll
+
+[CoInstall.CopyFiles]
+ScanCoInstall.dll
+DrvInfo.ini
+
+[Strings]
+MFGName="KONICA MINOLTA"
+MODELName1="KONICA MINOLTA 205i Scanner"
+MODELName3="KONICA MINOLTA 225i Scanner"
+
+MODELNameA="KONICA MINOLTA 205i WSD Scanner"
+MODELNameC="KONICA MINOLTA 225i WSD Scanner"
+DISKName="KONICA MINOLTA 205i/225i Scanner Driver Disk"

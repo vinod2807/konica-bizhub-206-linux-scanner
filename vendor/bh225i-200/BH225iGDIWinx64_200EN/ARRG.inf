@@ -1,0 +1,172 @@
+[Version]
+Signature="$Windows NT$"
+Class=Printer
+ClassGUID={4D36E979-E325-11CE-BFC1-08002BE10318}
+Provider=%OEM%
+DriverVer=12/27/2022,2.0.0.0
+CatalogFile=ARRG.cat
+
+;
+; Manufacturer section.
+;
+; This section lists all of the manufacturers
+; that we will display in the Dialog box
+;
+[Manufacturer]
+%OEM%=OEM,NTx86,NTamd64
+
+[OEM URLS]
+%OEM% = ""
+
+;
+; Model sections.
+;
+; Each section here corresponds with an entry listed in the
+; [Manufacturer] section, above. The models will be displayed in the order
+; that they appear in the INF file.
+;
+
+[OEM.NTx86]
+"KONICA MINOLTA 205i" = IMG_GS_MONO1,USBPRINT\KONICA_MINOLTA_205i54D1,WSDPRINT\KONICA_MINOLTA_205i54D1,USBPRINT\1284_CID_KONICA_MINOLTA_205i,WSDPRINT\1284_CID_KONICA_MINOLTA_205i
+"KONICA MINOLTA 225i" = IMG_GS_MONO2,USBPRINT\KONICA_MINOLTA_225i9470,WSDPRINT\KONICA_MINOLTA_225i9470,USBPRINT\1284_CID_KONICA_MINOLTA_225i,WSDPRINT\1284_CID_KONICA_MINOLTA_225i
+"KONICA MINOLTA 245i" = IMG_GS_MONO3,USBPRINT\KONICA_MINOLTA_245i9590,WSDPRINT\KONICA_MINOLTA_245i9590,USBPRINT\1284_CID_KONICA_MINOLTA_245i,WSDPRINT\1284_CID_KONICA_MINOLTA_245i
+
+[OEM.NTamd64]
+"KONICA MINOLTA 205i" = IMG_GS_MONO1,USBPRINT\KONICA_MINOLTA_205i54D1,WSDPRINT\KONICA_MINOLTA_205i54D1,USBPRINT\1284_CID_KONICA_MINOLTA_205i,WSDPRINT\1284_CID_KONICA_MINOLTA_205i
+"KONICA MINOLTA 225i" = IMG_GS_MONO2,USBPRINT\KONICA_MINOLTA_225i9470,WSDPRINT\KONICA_MINOLTA_225i9470,USBPRINT\1284_CID_KONICA_MINOLTA_225i,WSDPRINT\1284_CID_KONICA_MINOLTA_225i
+"KONICA MINOLTA 245i" = IMG_GS_MONO3,USBPRINT\KONICA_MINOLTA_245i9590,WSDPRINT\KONICA_MINOLTA_245i9590,USBPRINT\1284_CID_KONICA_MINOLTA_245i,WSDPRINT\1284_CID_KONICA_MINOLTA_245i
+
+
+;
+; Installer Sections
+;
+; These sections control file installation, and reference all files that
+; need to be copied. The section name will be assumed to be the driver
+; file, unless there is an explicit DriverFile section listed.
+;
+
+[IMG_GS_MONO1]
+CopyFiles=IMG_FILES,IMG_PP_FILES,IMG_GS_MONO_FILES1,LANGMON_FILES_NT5
+PrintProcessor="ARRGPPR,ARRGppr.dll"
+DataSection=IMG_GS_MONO_DATA1
+LanguageMonitor = "Language monitor,ARRGMON.DLL"
+
+[IMG_GS_MONO2]
+CopyFiles=IMG_FILES,IMG_PP_FILES,IMG_GS_MONO_FILES2,LANGMON_FILES_NT5
+PrintProcessor="ARRGPPR,ARRGppr.dll"
+DataSection=IMG_GS_MONO_DATA2
+LanguageMonitor = "Language monitor,ARRGMON.DLL"
+
+[IMG_GS_MONO3]
+CopyFiles=IMG_FILES,IMG_PP_FILES,IMG_GS_MONO_FILES3,LANGMON_FILES_NT5
+PrintProcessor="ARRGPPR,ARRGppr.dll"
+DataSection=IMG_GS_MONO_DATA3
+LanguageMonitor = "Language monitor,ARRGMON.DLL"
+
+
+; Copy Sections
+;
+; Lists of files that are actually copied. These sections are referenced
+; from the installer sections, above. Only create a section if it contains
+; two or more files (if we only copy a single file, identify it in the
+; installer section, using the @filename notation) or if it's a color
+; profile (since the DestinationDirs can only handle sections, and not
+; individual files).
+;
+
+[LANGMON_FILES_NT5]
+ARRGMON.DLL,,,0x0000000a
+
+[IMG_FILES]
+ARRG.dll
+ARRGui.dll
+ARRGime.dll
+ARRGdef.dll
+ARRGLANG.dll
+ARRGLANG.chm
+ARRGppr.dll
+
+[IMG_PP_FILES]
+ARRGppr.dll
+
+[IMG_GS_MONO_FILES1]
+ARRG205icfg.xml
+ARRGo.dll
+ARRG.ini
+
+[IMG_GS_MONO_FILES2]
+ARRG225icfg.xml
+ARRGo.dll
+ARRG.ini
+
+[IMG_GS_MONO_FILES3]
+ARRG245icfg.xml
+ARRGo.dll
+ARRG.ini
+
+;
+; Data Sections
+;
+; These sections contain data that is shared between devices.
+;
+
+[IMG_GS_MONO_DATA1]
+DriverFile=ARRG.dll
+ConfigFile=ARRGui.dll
+HelpFile=ARRGLANG.chm
+DataFile=ARRG205icfg.xml
+
+[IMG_GS_MONO_DATA2]
+DriverFile=ARRG.dll
+ConfigFile=ARRGui.dll
+HelpFile=ARRGLANG.chm
+DataFile=ARRG225icfg.xml
+
+[IMG_GS_MONO_DATA3]
+DriverFile=ARRG.dll
+ConfigFile=ARRGui.dll
+HelpFile=ARRGLANG.chm
+DataFile=ARRG245icfg.xml
+
+;
+; Call SetupSetDirectoryId with 66000 to set the target directory at runtime
+; (depending on which environment drivers are getting installed)
+;
+
+[DestinationDirs]
+DefaultDestDir=66000
+IMG_PP_FILES=66001
+LANGMON_FILES_NT5 = 66002
+
+;
+;  Source Disk Section
+;
+
+[SourceDisksNames.x86]
+1 = %DISK%,,,"."
+
+[SourceDisksNames.amd64]
+1 = %DISK%,,,"."
+
+[SourceDisksFiles]
+ARRG.dll         = 1
+ARRGui.dll       = 1
+ARRGime.dll      = 1
+ARRGdef.dll      = 1
+ARRGLANG.dll     = 1
+ARRGLANG.chm     = 1
+ARRGppr.dll      = 1
+ARRG205icfg.xml  = 1
+ARRG225icfg.xml  = 1
+ARRG245icfg.xml  = 1
+ARRGo.dll        = 1
+ARRG.ini         = 1
+ARRGMON.DLL      = 1
+
+;
+; Localizable Strings
+;
+[Strings]
+OEM="KONICA MINOLTA"
+PRINTERMONO="KONICA MINOLTA"
+DISK="KONICA MINOLTA ACN2/ACN3 Printer Driver"

@@ -1,9 +1,3 @@
-vendor/
-captures/*.pcapng
-captures/*.pcap
+# Python bytecode cache (regenerated build junk, not published)
 __pycache__/
 *.pyc
-probe/*.bin
-sane/*.o
-sane/*.so
-sane/*.so.*

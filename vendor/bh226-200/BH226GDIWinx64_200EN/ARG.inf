@@ -1,0 +1,177 @@
+;
+; List of supported printers, manufacturers
+;
+
+[Version]
+Signature="$Windows NT$"
+Class=Printer
+CatalogFile=ARG.CAT
+ClassGUID={4D36E979-E325-11CE-BFC1-08002BE10318}
+Provider=%ORION%
+DriverVer=05/06/2016,2.0.0.0
+
+;
+; Manufacturer section.
+;
+; This section lists all of the manufacturers
+; that we will display in the Dialog box
+;
+[Manufacturer]
+%GS%=ORION,NTamd64
+
+;
+; Model sections.
+;
+; Each section here corresponds with an entry listed in the
+; [Manufacturer] section, above. The models will be displayed in the order
+; that they appear in the INF file.
+;
+
+[ORION.NTamd64]
+"KONICA MINOLTA 226" = ONG1_TDI,USBPRINT\KONICA_MINOLTA22620D7,WSDPRINT\KONICA_MINOLTA22620D7,USBPRINT\1284_CID_KONICA_MINOLTA226,WSDPRINT\1284_CID_KONICA_MINOLTA226
+"KONICA MINOLTA 246" = ONG2_TDI,USBPRINT\KONICA_MINOLTA24682D4,WSDPRINT\KONICA_MINOLTA24682D4,USBPRINT\1284_CID_KONICA_MINOLTA246,WSDPRINT\1284_CID_KONICA_MINOLTA246
+"KONICA MINOLTA 206" = ONG3_TDI,USBPRINT\KONICA_MINOLTA20642D6,WSDPRINT\KONICA_MINOLTA20642D6,USBPRINT\1284_CID_KONICA_MINOLTA206,WSDPRINT\1284_CID_KONICA_MINOLTA206
+
+
+[ORION]
+"KONICA MINOLTA 226" = ONG1_TDI,USBPRINT\KONICA_MINOLTA22620D7,WSDPRINT\KONICA_MINOLTA22620D7,USBPRINT\1284_CID_KONICA_MINOLTA226,WSDPRINT\1284_CID_KONICA_MINOLTA226
+"KONICA MINOLTA 246" = ONG2_TDI,USBPRINT\KONICA_MINOLTA24682D4,WSDPRINT\KONICA_MINOLTA24682D4,USBPRINT\1284_CID_KONICA_MINOLTA246,WSDPRINT\1284_CID_KONICA_MINOLTA246
+"KONICA MINOLTA 206" = ONG3_TDI,USBPRINT\KONICA_MINOLTA20642D6,WSDPRINT\KONICA_MINOLTA20642D6,USBPRINT\1284_CID_KONICA_MINOLTA206,WSDPRINT\1284_CID_KONICA_MINOLTA206
+
+
+
+;
+; Installer Sections
+;
+; These sections control file installation, and reference all files that
+; need to be copied. The section name will be assumed to be the driver
+; file, unless there is an explicit DriverFile section listed.
+;
+
+[ONG1_TDI]
+CopyFiles=TS_FILES,TS_PP_FILES,ONG1_TDI_FILES,LANGMON_FILES_NT5
+DataSection=ONG1_TDI_DATA
+
+[ONG2_TDI]
+CopyFiles=TS_FILES,TS_PP_FILES,ONG2_TDI_FILES,LANGMON_FILES_NT5
+DataSection=ONG2_TDI_DATA
+
+[ONG3_TDI]
+CopyFiles=TS_FILES,TS_PP_FILES,ONG3_TDI_FILES,LANGMON_FILES_NT5
+DataSection=ONG3_TDI_DATA
+
+
+
+; Copy Sections
+;
+; Lists of files that are actually copied. These sections are referenced
+; from the installer sections, above. Only create a section if it contains
+; two or more files (if we only copy a single file, identify it in the
+; installer section, using the @filename notation) or if it's a color
+; profile (since the DestinationDirs can only handle sections, and not
+; individual files).
+;
+
+[LANGMON_FILES_NT5]
+ARGMON.DLL
+
+[TS_FILES]
+ARG.dll
+ARGui.dll
+ARGwm.exe
+ARGe.dll
+ARGppr.dll
+ARGLANG.dll
+ARGLANG.chm
+
+[TS_PP_FILES]
+ARGppr.dll
+
+[ONG1_TDI_FILES]
+ARG.fl
+ARGo.dll
+ARG226.xpi
+ARG.ini
+
+[ONG2_TDI_FILES]
+ARG.fl
+ARGo.dll
+ARG246.xpi
+ARG.ini
+
+[ONG3_TDI_FILES]
+ARG.fl
+ARGo.dll
+ARG206.xpi
+ARG.ini
+
+
+
+;
+; Data Sections
+;
+; These sections contain data that is shared between devices.
+;
+
+[ONG1_TDI_DATA]
+DriverFile=ARG.dll
+ConfigFile=ARGui.dll
+DataFile=ARG226.xpi
+PrintProcessor="ARGPPR,ARGppr.dll"
+LanguageMonitor = "Language monitor,ARGMON.DLL"
+
+[ONG2_TDI_DATA]
+DriverFile=ARG.dll
+ConfigFile=ARGui.dll
+DataFile=ARG246.xpi
+PrintProcessor="ARGPPR,ARGppr.dll"
+LanguageMonitor = "Language monitor,ARGMON.DLL"
+
+[ONG3_TDI_DATA]
+DriverFile=ARG.dll
+ConfigFile=ARGui.dll
+DataFile=ARG206.xpi
+PrintProcessor="ARGPPR,ARGppr.dll"
+LanguageMonitor = "Language monitor,ARGMON.DLL"
+
+;
+; Call SetupSetDirectoryId with 66000 to set the target directory at runtime
+; (depending on which environment drivers are getting installed)
+;
+
+[DestinationDirs]
+DefaultDestDir=66000
+TS_PP_FILES=66001
+LANGMON_FILES_NT5 = 66002
+
+;
+;  Source Disk Section
+;
+
+[SourceDisksNames.amd64]
+1   = %GSDISK%,,,"."
+
+[SourceDisksFiles.amd64]
+ARG.dll      = 1
+ARGui.dll    = 1
+ARGwm.exe    = 1
+ARGe.dll     = 1
+ARGppr.dll   = 1
+ARG.fl       = 1
+ARGo.dll     = 1
+ARGLANG.dll  = 1
+ARGLANG.chm  = 1
+ARGMON.DLL   = 1
+ARG.ini      = 1
+ARG226.xpi   = 1
+ARG246.xpi   = 1
+ARG206.xpi   = 1
+
+
+;
+; Localizable Strings
+;
+[Strings]
+GS="KONICA MINOLTA"
+GSDISK="KONICA MINOLTA A3PE/A3R2 Printer Driver"
+ORION="KONICA MINOLTA"

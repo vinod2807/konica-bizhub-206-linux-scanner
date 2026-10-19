@@ -1,0 +1,572 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DeviceCapabilities xsi:schemaLocation="http://www.pwg.org/schemas/upd/2.0/
+                                        ../../Schemas/Updf2/updf.xsd
+                                        http://schemas.monotypeimaging.com/upd/2.0/
+                                        ../../Schemas/Updf2/MTI/MTIDataTypes.xsd 
+                                        http://schemas.monotypeimaging.com/upd/oem/1/
+                                        ../Schemas/Updf2/OEMDataTypes.xsd"
+                    xmlns="http://www.pwg.org/schemas/upd/2.0/" 
+                    xmlns:mti="http://schemas.monotypeimaging.com/upd/2.0/" 
+                    xmlns:oem="http://schemas.monotypeimaging.com/upd/oem/1/" 
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    FileTypeIdentification="device description"
+                    UPDFVersion="2.00.00.00">
+  <FileInfo FileVersion="1.0.0.0"/>
+  <DeviceHeader ModelName="STR_MODEL_NAME">
+    <About AboutStatement="COPYRIGHT1"/>
+    <About AboutStatement="COPYRIGHT2"/>
+    <About AboutStatement="COPYRIGHT3"/>
+    <About AboutStatement="COPYRIGHT4"/>
+    <About AboutStatement="COPYRIGHT5"/>
+    <About AboutStatement="COPYRIGHT6"/>
+  </DeviceHeader>
+  <PrintCapabilities>
+    <Header>
+      <Engine EngineSpeedPPM="20"/>
+      <Languages>
+        <PageDescriptionLanguage PDLMajorLevel="image/gstream"/>
+        <VendorExtension>
+          <mti:LanguageFeatures>
+            <mti:LanguageFeature ClassifyingID="IMAGE-FontEmbedding"/>
+            <mti:LanguageFeature ClassifyingID="IMAGE-GrayConvert"/>
+            <mti:LanguageFeature ClassifyingID="IMAGE-Redriveable"/>
+            <mti:LanguageFeature ClassifyingID="RotateNUp"/>
+            <mti:LanguageFeature ClassifyingID="WmZoom"/>
+          </mti:LanguageFeatures>
+        </VendorExtension>
+      </Languages>
+      <VendorExtension>
+        <oem:PrinterDriverInfo>
+          <oem:HardwareIDs>
+            <oem:HWID value="LPTENUM\mt4rgs1236"/>
+            <oem:HWID value="mt4rgs1236"/>
+          </oem:HardwareIDs>
+          <oem:v4-XPS GUID="{6A61A43F-8FAB-46E1-9268-6F30A0FA66B2}" MSXPS="true" OpenXPS="false">
+            <oem:Manifest install="mt4rgsm-manifest.ini"/>
+            <oem:PipelineConfig install="mt4rgsm_PipelineConfig.xml"/>
+            <oem:FilterCore original="mt4r.dll" install="mt4r.dll" name="Monotype v4.RAST Filter"/>
+            <oem:DataFile install="mt4rgsmcfg.gpd"/>
+            <oem:PrinterExtension original="PrinterExtensionDesktop.exe" install="PrinterExtensionDesktop.exe"/>
+            <oem:UIResource original="uires.dll" install="mt4ruires.dll"/>
+            <oem:UISymbols original="symbols.gpd" install="mt4rsymbols.gpd"/>
+            <oem:DevModeMap original="map.xml" install="mt4rmap.xml"/>
+            <oem:QueueProps original="que.xml" install="mt4rque.xml"/>
+            <oem:Constraints original="constraints.js" install="mt4rconstraints.js"/>
+            <oem:PropertyBag original="gsmdrv.bag" install="mt4rgsmdrv.bag"/>
+            <oem:PlatformDependent original="gsmo.dll" install="mt4rgsmo.dll"/>
+            <oem:PlatformIndependent original="Monotype.PrinterExtensionLibrary.dll" install="Monotype.PrinterExtensionLibrary.dll"/>
+            <oem:Catalog install="mt4rast.cat"/>
+          </oem:v4-XPS>
+        </oem:PrinterDriverInfo>
+        <mti:XpsFilterConfiguration>
+          <mti:General>
+            <mti:Features>
+              <mti:PageOrder Enable="true" />
+              <mti:DocCollate Enable="true" />
+              <mti:JobCollate Enable="true" />
+              <mti:JobCopyCount Enable="true" />
+              <mti:DocCopyCount Enable="true" />
+              <mti:PageCopyCount Enable="true" />
+              <mti:NUp Enable="true" />
+              <mti:Watermarks Enable="true" />
+              <mti:MtiCovers Enable="true" />
+              <mti:Booklet Enable="true" />
+              <mti:Overlays Enable="true" />
+              <mti:Interleaves Enable="true" />
+              <mti:Poster Enable="true" />
+              <mti:Scaling Enable="true" />
+              <mti:Exceptions Enable="true" />
+              <mti:PageRanges Enable="true" />
+              <mti:BindingShift Enable="true" />
+              <mti:MirrorImage Enable="false" />
+            </mti:Features>
+            <mti:Memory>
+              <mti:Scheme Physical="0" ResourcePool="65536" Band="1024" TexturePool="4096"
+                          TextureNodes="0" ColorNodes="4096" Input="4096" Output="65535"/>
+              <mti:Scheme Physical="1024000" ResourcePool="131070" Band="1024" TexturePool="4096"
+                          TextureNodes="0" ColorNodes="4096" Input="4096" Output="262144"/>
+              <mti:Scheme Physical="2048000" ResourcePool="262144" Band="1024" TexturePool="8192"
+                          TextureNodes="0" ColorNodes="4096" Input="4096" Output="262144" />
+            </mti:Memory>
+            <mti:Optimizations>
+              <mti:FlattenStrokes Enable="true" />
+              <mti:FlattenLinearGradient Enable="true" Granularity="12" />
+              <mti:FlattenRadialGradient Enable="true" Granularity="12" />
+              <mti:FlattenCurves Enable="true" Granularity="12" />
+              <mti:FlattenOpacityMask Enable="false" />
+              <mti:FlattenThinStrokes Enable="true" AbsoluteMin="0.16" AbsoluteMax="0.48" />
+              <mti:FlattenTinyTilesImg Enable="true" Threshold="1.28" />
+              <mti:FlattenTinyTilesVisBrush Enable="true" Threshold="1.28" />
+              <mti:FlattenOpacity Enable="false" />
+              <mti:ConvertImages Enable="false" Wdp="TIFF,NONE" Tiff="WDP,JPEG,NONE"
+                                 Png="JPEG,PNG,TIFF" Jpeg="TIFF,PNG" />
+            </mti:Optimizations>
+            <mti:Options>
+              <mti:CollectInsets Enable="false" />
+              <mti:ObeyDiscards Enable="true" />
+              <mti:NUpEjectOnNewSize Enable="true" />
+              <mti:NUpScaleMedia Enable="false" />
+              <mti:NUpMismatchRotate Enable="true" Angle="0" />
+              <mti:WmZoom Enable="false"/>
+              <mti:WmZoomClip Enable="false"/>
+              <mti:DocumentRelationSearch Enable="true" Distance="3"/>
+            </mti:Options>
+            <mti:Rendering>
+              <mti:Blend ColorSpace="sRGB" Force="false" />
+              <mti:Glyphs Rasterizer="UFST" BoldSimulationEmPercent="2.0"
+                          ItalicSimulationShearDegrees="20.0"/>
+              <mti:ImageTransform Upscale="NearestNeighbor" Downscale="NearestNeighbor" />
+            </mti:Rendering>
+          </mti:General>
+          <mti:Cim />
+        </mti:XpsFilterConfiguration>
+      </VendorExtension>
+    </Header>
+    <Features>
+      <PrinterResolution ID="PrinterResolution" DefaultSetting="Resolution600">
+        <PrinterResolutionRecord ID="Resolution600" ClassifyingID="Resolution_600x600" StringID="GUI_STR_600x600" />
+      </PrinterResolution>
+      <Copies ID="Copies" DefaultSetting="1">
+        <VariableValue ID="CopyCount" Minimum="1" Maximum="999" Step="1"/>
+      </Copies>
+      <Collation ID="Collation" DefaultSetting="Uncollated">
+        <CollationRecord ID="Uncollated" ClassifyingID="Uncollated"/>
+        <CollationRecord ID="Collated" ClassifyingID="Collated"/>
+      </Collation>
+      <OrientationRequested ID="OrientationRequested" DefaultSetting="Portrait">
+        <OrientationRequestedRecord ID="Portrait" ClassifyingID="Portrait"/>
+        <OrientationRequestedRecord ID="Landscape" ClassifyingID="Landscape"/>
+      </OrientationRequested>
+      <MediaPageRotation ID="MediaPageRotation" DefaultSetting="NotRotated">
+        <MediaPageRotationRecord ID="NotRotated" ClassifyingID="standard"/>
+        <MediaPageRotationRecord ID="Rotated" ClassifyingID="reverse"/>
+      </MediaPageRotation>
+      <MediaSize ID="MediaSize">
+        <MediaSizeRecord ID="Letter" ClassifyingID="na_letter_8.5x11in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_LETTER"/>
+        <MediaSizeRecord ID="Legal" ClassifyingID="na_legal_8.5x14in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_LEGAL"/>
+        <MediaSizeRecord ID="11x17" ClassifyingID="na_ledger_11x17in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_11X17"/>
+        <MediaSizeRecord ID="A3" ClassifyingID="iso_a3_297x420mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_A3"/>
+        <MediaSizeRecord ID="A4" ClassifyingID="iso_a4_210x297mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_A4"/>
+        <MediaSizeRecord ID="A5" ClassifyingID="iso_a5_148x210mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_A5"/>
+        <MediaSizeRecord ID="A6" ClassifyingID="iso_a6_105x148mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_A6"/>
+        <MediaSizeRecord ID="JIS-B4" ClassifyingID="jis_b4_257x364mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_B4"/>
+        <MediaSizeRecord ID="JIS-B5" ClassifyingID="jis_b5_182x257mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_B5"/>
+        <MediaSizeRecord ID="JIS-B6" ClassifyingID="jis_b6_128x182mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_ENV_B6_2"/>
+        <MediaSizeRecord ID="Executive" ClassifyingID="na_executive_7.25x10.5in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_EXECUTIVE"/>
+        <MediaSizeRecord ID="Env10" ClassifyingID="na_number-10_4.125x9.5in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_ENV_COM10"/>
+        <MediaSizeRecord ID="EnvDL" ClassifyingID="iso_dl_110x220mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_ENV_DL_2"/>
+        <MediaSizeRecord ID="EnvC6" ClassifyingID="iso_c6_114x162mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_ENV_C6_2"/>
+        <MediaSizeRecord ID="FLS-1" ClassifyingID="om_folio_209.5x330.2mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_1"/>
+        <MediaSizeRecord ID="FLS-2" ClassifyingID="na_folio_215.9x330.2mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_2"/>
+        <MediaSizeRecord ID="FLS-3" ClassifyingID="custom_folio_220x330mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_3"/>
+        <MediaSizeRecord ID="FLS-4" ClassifyingID="custom_folio_206.3x336.5mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_4"/>
+        <MediaSizeRecord ID="FLS-5" ClassifyingID="custom_folio_203.2x330.2mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_5"/>
+        <MediaSizeRecord ID="FLS-6" ClassifyingID="custom_folio_8.5x13.5in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_FLS_6"/>
+        <MediaSizeRecord ID="Invoice" ClassifyingID="na_invoice_5.5x8.5in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_INVOICE"/>
+        <MediaSizeRecord ID="8K" ClassifyingID="na_8k_270x390mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_8K"/>
+        <MediaSizeRecord ID="16K" ClassifyingID="na_16k_195x270mm" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_16K"/>
+        <MediaSizeRecord ID="EnvNAC6" ClassifyingID="na_personal_3.624x6.496in" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_ENV_C6_3"/>
+        <MediaSizeRecord ID="Custom" ClassifyingID="custom" HardwareMargins="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in"
+                         HardwareMarginsLandscape="margins_left-0.167_top-0.167_right-0.167_bottom-0.167in" StringID="GUI_STR_CUSTOM_MIN"/>
+      </MediaSize>
+      <MediaType ID="MediaType" DefaultSetting="Plain">
+        <MediaTypeRecord ID="Plain" ClassifyingID="plain" StringID="IDS_Plain"/>
+        <MediaTypeRecord ID="Recyle" ClassifyingID="recyle" StringID="IDS_Recycle"/>
+        <MediaTypeRecord ID="1-Side" ClassifyingID="1-side" StringID="IDS_Oneside"/>
+        <MediaTypeRecord ID="Special" ClassifyingID="special" StringID="IDS_Special"/>
+        <MediaTypeRecord ID="Transparency" ClassifyingID="transparency" StringID="IDS_Transparency"/>
+        <MediaTypeRecord ID="Card1" ClassifyingID="card1" StringID="IDS_Card1"/>
+        <MediaTypeRecord ID="Card2" ClassifyingID="card2" StringID="IDS_Card2"/>
+        <MediaTypeRecord ID="Envelope" ClassifyingID="envelope" StringID="IDS_Envelope"/>
+        <MediaTypeRecord ID="Plain-2-Side" ClassifyingID="plain-2-side" StringID="IDS_PlainS"/>
+        <MediaTypeRecord ID="Card1-2-Side" ClassifyingID="card1-2-side" StringID="IDS_Card1S"/>
+        <MediaTypeRecord ID="Card2-2-Side" ClassifyingID="card2-2-side" StringID="IDS_Card2S"/>
+        <MediaTypeRecord ID="Recyle-2-Side" ClassifyingID="recyle-2-side" StringID="IDS_RecycleS"/>
+      </MediaType>
+      <MediaInputTrayCheck ID="MediaInputTrayCheck" DefaultSetting="AutoSelectInputTray">
+        <MediaInputTrayCheckRecord ID="AutoSelectInputTray" ClassifyingID="auto-select" StringID="IDS_Auto" CustomSizeMinimumSize="custom_min_90x140mm" CustomSizeMaximumSize="custom_max_297x432mm">
+          <Parameter Value="0"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="Tray1" ClassifyingID="tray-1" StringID="IDS_Tray1" CustomSizeMinimumSize="custom_min_90x140mm" CustomSizeMaximumSize="custom_max_297x432mm">
+          <Parameter Value="1"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="Tray2" ClassifyingID="tray-2" StringID="IDS_Tray2">
+          <Parameter Value="2"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="Tray3" ClassifyingID="tray-3" StringID="IDS_Tray3">
+          <Parameter Value="3"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="Tray4" ClassifyingID="tray-4" StringID="IDS_Tray4">
+          <Parameter Value="4"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="Tray5" ClassifyingID="tray-5" StringID="IDS_Tray5">
+          <Parameter Value="5"/>
+        </MediaInputTrayCheckRecord>
+        <MediaInputTrayCheckRecord ID="ManualFeed" ClassifyingID="manual" StringID="IDS_Bypass" CustomSizeMinimumSize="custom_min_90x140mm" CustomSizeMaximumSize="custom_max_297x432mm">
+          <Parameter Value="6"/>
+        </MediaInputTrayCheckRecord>
+      </MediaInputTrayCheck>
+      <Sides ID="Sides" DefaultSetting="Simplex">
+        <SidesRecord ID="Simplex" ClassifyingID="OneSided"/>
+        <SidesRecord ID="LongEdge" ClassifyingID="TwoSidedLongEdge"/>
+        <SidesRecord ID="ShortEdge" ClassifyingID="TwoSidedShortEdge"/>
+      </Sides>
+      <GenericFeature ID="Compression" DefaultSetting="CompressPackBits" StringID="STR_COMPRESSION">
+        <GenericFeatureRecord ID="CompressPackBits" StringID="STR_PACK_BITS">
+          <VendorExtension>
+            <oem:OCMData value="compression=1"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="CompressFlate" StringID="STR_FLATE">
+          <VendorExtension>
+            <oem:OCMData value="compression=2"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="CompressAdobeFlate" StringID="STR_ADOBE_FLATE">
+          <VendorExtension>
+            <oem:OCMData value="compression=3"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="CompressLZW" StringID="STR_LZW">
+          <VendorExtension>
+            <oem:OCMData value="compression=4"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="CompressNone" StringID="GUI_STR_NONE">
+          <VendorExtension>
+            <oem:OCMData value="compression=0"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+      </GenericFeature>
+      <GenericFeature ID="Encoding" DefaultSetting="EncodingCompact" StringID="STR_ENCODING">
+        <GenericFeatureRecord ID="EncodingCompact" StringID="STR_COMPACT">
+          <VendorExtension>
+            <oem:OCMData value="encoding=0"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="EncodingChannels" StringID="STR_CHANNELS">
+          <VendorExtension>
+            <oem:OCMData value="encoding=1"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+      </GenericFeature>
+      <GenericFeature ID="SaveTiffs" DefaultSetting="SaveTiffsNo" StringID="STR_SAVE_TIFFS">
+        <GenericFeatureRecord ID="SaveTiffsNo" StringID="STR_SAVE_TIFFS_NO">
+          <VendorExtension>
+            <oem:OCMData value="saveTiffs=0"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+        <GenericFeatureRecord ID="SaveTiffsYes" StringID="STR_SAVE_TIFFS_YES">
+          <VendorExtension>
+            <oem:OCMData value="saveTiffs=1"/>
+          </VendorExtension>
+        </GenericFeatureRecord>
+      </GenericFeature>
+    </Features>
+    <BaseUnit ID="BaseUnit" ShippingUnit="true">
+      <Connectors>
+        <ConnectorForChildUnit ID="DuplexConnector"/>
+        <ConnectorForChildUnit ID="OptionalTrayConnector"/>
+        <ConnectorForChildUnit ID="OptionalManualFeedConnector"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="PrinterResolution">
+          <FeatureRecordReference ID="Resolution600"/>
+        </FeatureReference>
+        <FeatureReference ID="Copies">
+          <FeatureRecordReference ID="CopyCount"/>
+        </FeatureReference>
+        <FeatureReference ID="Collation">
+          <FeatureRecordReference ID="Uncollated"/>
+          <FeatureRecordReference ID="Collated"/>
+        </FeatureReference>
+        <FeatureReference ID="OrientationRequested">
+          <FeatureRecordReference ID="Portrait"/>
+          <FeatureRecordReference ID="Landscape"/>
+        </FeatureReference>
+        <FeatureReference ID="MediaPageRotation">
+          <FeatureRecordReference ID="NotRotated"/>
+          <FeatureRecordReference ID="Rotated"/>
+        </FeatureReference>
+        <FeatureReference ID="MediaSize">
+          <FeatureRecordReference ID="Letter"/>
+          <FeatureRecordReference ID="Legal"/>
+          <FeatureRecordReference ID="11x17"/>
+          <FeatureRecordReference ID="A3"/>
+          <FeatureRecordReference ID="A4"/>
+          <FeatureRecordReference ID="A5"/>
+          <FeatureRecordReference ID="A6"/>
+          <FeatureRecordReference ID="JIS-B4"/>
+          <FeatureRecordReference ID="JIS-B5"/>
+          <FeatureRecordReference ID="JIS-B6"/>
+          <FeatureRecordReference ID="Executive"/>
+          <FeatureRecordReference ID="Env10"/>
+          <FeatureRecordReference ID="EnvDL"/>
+          <FeatureRecordReference ID="EnvC6"/>
+          <FeatureRecordReference ID="FLS-1"/>
+          <FeatureRecordReference ID="FLS-2"/>
+          <FeatureRecordReference ID="FLS-3"/>
+          <FeatureRecordReference ID="FLS-4"/>
+          <FeatureRecordReference ID="FLS-5"/>
+          <FeatureRecordReference ID="FLS-6"/>
+          <FeatureRecordReference ID="Invoice"/>
+          <FeatureRecordReference ID="8K"/>
+          <FeatureRecordReference ID="16K"/>
+          <FeatureRecordReference ID="EnvNAC6"/>
+        </FeatureReference>
+        <FeatureReference ID="MediaType">
+          <FeatureRecordReference ID="Plain"/>
+          <FeatureRecordReference ID="Recyle"/>
+          <FeatureRecordReference ID="1-Side"/>
+          <FeatureRecordReference ID="Special"/>
+          <FeatureRecordReference ID="Transparency"/>
+          <FeatureRecordReference ID="Card1"/>
+          <FeatureRecordReference ID="Card2"/>
+          <FeatureRecordReference ID="Envelope"/>
+          <FeatureRecordReference ID="Plain-2-Side"/>
+          <FeatureRecordReference ID="Card1-2-Side"/>
+          <FeatureRecordReference ID="Card2-2-Side"/>
+          <FeatureRecordReference ID="Recyle-2-Side"/>
+        </FeatureReference>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="AutoSelectInputTray"/>
+          <FeatureRecordReference ID="ManualFeed"/>
+          <FeatureRecordReference ID="Tray1"/>
+          <FeatureRecordReference ID="Tray2"/>
+          <FeatureRecordReference ID="Tray3"/>
+          <FeatureRecordReference ID="Tray4"/>
+          <FeatureRecordReference ID="Tray5"/>
+        </FeatureReference>
+        <FeatureReference ID="Compression">
+          <FeatureRecordReference ID="CompressPackBits"/>
+          <FeatureRecordReference ID="CompressFlate"/>
+          <FeatureRecordReference ID="CompressAdobeFlate"/>
+          <FeatureRecordReference ID="CompressLZW"/>
+          <FeatureRecordReference ID="CompressNone"/>
+        </FeatureReference>
+        <FeatureReference ID="Encoding">
+          <FeatureRecordReference ID="EncodingCompact"/>
+          <FeatureRecordReference ID="EncodingChannels"/>
+        </FeatureReference>
+        <FeatureReference ID="SaveTiffs">
+          <FeatureRecordReference ID="SaveTiffsYes"/>
+          <FeatureRecordReference ID="SaveTiffsNo"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </BaseUnit>
+    <InstallableOption ID="DuplexUnit" ShippingUnit="false" StringID="IDS_OPT_DUPLEXER">
+      <Connectors>
+        <ConnectorAtParentUnit ConnectorIDRef="DuplexConnector"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="Sides">
+          <FeatureRecordReference ID="Simplex"/>
+          <FeatureRecordReference ID="LongEdge"/>
+          <FeatureRecordReference ID="ShortEdge"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <InstallableOption ID="OptionalTray2" ShippingUnit="false" StringID="IDS_Tray2">
+      <Connectors>
+        <ConnectorForChildUnit ID="OptionalTrayConnector2"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="Tray2"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <InstallableOption ID="OptionalTray3" ShippingUnit="false" StringID="IDS_Tray3">
+      <Corequisites>
+        <Corequisite InstallableOptionIDRef="OptionalTray2"/>
+      </Corequisites>
+      <Connectors>
+        <ConnectorForChildUnit ID="OptionalTrayConnector3"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector2"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="Tray3"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <InstallableOption ID="OptionalTray4" ShippingUnit="false" StringID="IDS_Tray4">
+      <Corequisites>
+        <Corequisite InstallableOptionIDRef="OptionalTray2"/>
+        <Corequisite InstallableOptionIDRef="OptionalTray3"/>
+      </Corequisites>
+      <Connectors>
+        <ConnectorForChildUnit ID="OptionalTrayConnector4"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector2"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector3"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="Tray4"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <InstallableOption ID="OptionalTray5" ShippingUnit="false" StringID="IDS_Tray5">
+      <Corequisites>
+        <Corequisite InstallableOptionIDRef="OptionalTray2"/>
+        <Corequisite InstallableOptionIDRef="OptionalTray3"/>
+        <Corequisite InstallableOptionIDRef="OptionalTray4"/>
+      </Corequisites>
+      <Connectors>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector2"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector3"/>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalTrayConnector4"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="Tray5"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <InstallableOption ID="OptionalManualFeed" ShippingUnit="true" StringID="IDS_Bypass">
+      <Connectors>
+        <ConnectorAtParentUnit ConnectorIDRef="OptionalManualFeedConnector"/>
+      </Connectors>
+      <FeatureReferences>
+        <FeatureReference ID="MediaInputTrayCheck">
+          <FeatureRecordReference ID="ManualFeed"/>
+        </FeatureReference>
+      </FeatureReferences>
+    </InstallableOption>
+    <UserInterfaces>
+      <VendorExtension>
+        <oem:UserInterfaceInfo>
+          <oem:WebSite URL="http://www.monotype.com/drivers"/>
+        </oem:UserInterfaceInfo>
+      </VendorExtension>
+    </UserInterfaces>
+    <UserInterfaceStrings>
+      <DefaultLocale>
+        <LocaleIdentifierLong Country="US-United_States" Language="en-English"/>
+        <DefaultLocaleElement StringID="STR_MODEL_NAME" LocalizedString="GStreamMono"/>
+        <DefaultLocaleElement StringID="COPYRIGHT1" LocalizedString="KONICA MINOLTA 205i"/>
+        <DefaultLocaleElement StringID="COPYRIGHT2" LocalizedString="0.01"/>
+        <DefaultLocaleElement StringID="COPYRIGHT3" LocalizedString=""/>
+        <DefaultLocaleElement StringID="COPYRIGHT4" LocalizedString="Copyright (C) 2019 KONICA MINOLTA, INC."/>
+        <DefaultLocaleElement StringID="COPYRIGHT5" LocalizedString="Copyright (c) Teco Image Systems Co, Ltd and his Licensors. All Rights Reserved"/>
+        <DefaultLocaleElement StringID="COPYRIGHT6" LocalizedString=""/>
+        <DefaultLocaleElement StringID="STR_COMPRESSION" LocalizedString="Compression"/>
+        <DefaultLocaleElement StringID="STR_PACK_BITS" LocalizedString="PackBits"/>
+        <DefaultLocaleElement StringID="STR_FLATE" LocalizedString="Flate"/>
+        <DefaultLocaleElement StringID="STR_ADOBE_FLATE" LocalizedString="Flate(Adobe)"/>
+        <DefaultLocaleElement StringID="STR_LZW" LocalizedString="LZW"/>
+        <DefaultLocaleElement StringID="STR_TRIM" LocalizedString="Trim"/>
+        <DefaultLocaleElement StringID="STR_PAGE" LocalizedString="Page"/>
+        <DefaultLocaleElement StringID="STR_ENCODING" LocalizedString="Encoding"/>
+        <DefaultLocaleElement StringID="STR_COMPACT" LocalizedString="Compact (indexed)"/>
+        <DefaultLocaleElement StringID="STR_CHANNELS" LocalizedString="Full color (multi-channel)"/>
+        <DefaultLocaleElement StringID="STR_HALFTONE" LocalizedString="Halftone Set"/>
+        <DefaultLocaleElement StringID="STR_SAVE_TIFFS" LocalizedString="Save Tiffs?"/>
+        <DefaultLocaleElement StringID="STR_SAVE_TIFFS_NO" LocalizedString="Do not save Tiffs."/>
+        <DefaultLocaleElement StringID="STR_SAVE_TIFFS_YES" LocalizedString="Save Tiffs."/>
+        <DefaultLocaleElement StringID="GUI_STR_EXECUTIVE" LocalizedString="GUI_STR_EXECUTIVE"/>
+        <DefaultLocaleElement StringID="GUI_STR_LEGAL" LocalizedString="GUI_STR_LEGAL"/>
+        <DefaultLocaleElement StringID="GUI_STR_LETTER" LocalizedString="GUI_STR_LETTER"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_COM10" LocalizedString="GUI_STR_ENV_COM10"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_DL_2" LocalizedString="GUI_STR_ENV_DL_2"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_C6_2" LocalizedString="GUI_STR_ENV_C6_2"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_MONARCH" LocalizedString="GUI_STR_ENV_MONARCH"/>
+        <DefaultLocaleElement StringID="GUI_STR_B5" LocalizedString="GUI_STR_B5"/>
+        <DefaultLocaleElement StringID="GUI_STR_A4" LocalizedString="GUI_STR_A4"/>
+        <DefaultLocaleElement StringID="GUI_STR_11X17" LocalizedString="GUI_STR_11X17"/>
+        <DefaultLocaleElement StringID="GUI_STR_A3" LocalizedString="GUI_STR_A3"/>
+        <DefaultLocaleElement StringID="GUI_STR_A5" LocalizedString="GUI_STR_A5"/>
+        <DefaultLocaleElement StringID="GUI_STR_A6" LocalizedString="GUI_STR_A6"/>
+        <DefaultLocaleElement StringID="GUI_STR_B4" LocalizedString="GUI_STR_B4"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_B6_2" LocalizedString="GUI_STR_ENV_B6_2"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_1" LocalizedString="GUI_STR_FLS_1"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_2" LocalizedString="GUI_STR_FLS_2"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_3" LocalizedString="GUI_STR_FLS_3"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_4" LocalizedString="GUI_STR_FLS_4"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_5" LocalizedString="GUI_STR_FLS_5"/>
+        <DefaultLocaleElement StringID="GUI_STR_FLS_6" LocalizedString="GUI_STR_FLS_6"/>
+        <DefaultLocaleElement StringID="GUI_STR_INVOICE" LocalizedString="GUI_STR_INVOICE"/>
+        <DefaultLocaleElement StringID="GUI_STR_8K" LocalizedString="GUI_STR_8K"/>
+        <DefaultLocaleElement StringID="GUI_STR_16K" LocalizedString="GUI_STR_16K"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENV_C6_3" LocalizedString="GUI_STR_ENV_C6_3"/>
+        <DefaultLocaleElement StringID="IDS_OPT_DUPLEXER" LocalizedString="IDS_OPT_DUPLEXER"/>
+        <DefaultLocaleElement StringID="IDS_Bypass" LocalizedString="IDS_Bypass"/>
+        <DefaultLocaleElement StringID="IDS_Tray5" LocalizedString="IDS_Tray5"/>
+        <DefaultLocaleElement StringID="IDS_Tray4" LocalizedString="IDS_Tray4"/>
+        <DefaultLocaleElement StringID="IDS_Tray3" LocalizedString="IDS_Tray3"/>
+        <DefaultLocaleElement StringID="IDS_Tray2" LocalizedString="IDS_Tray2"/>
+        <DefaultLocaleElement StringID="IDS_Tray1" LocalizedString="IDS_Tray1"/>
+        <DefaultLocaleElement StringID="IDS_Auto" LocalizedString="IDS_Auto"/>
+        <DefaultLocaleElement StringID="GUI_STR_ENVELOPE" LocalizedString="GUI_STR_ENVELOPE"/>
+        <DefaultLocaleElement StringID="GUI_STR_HEAVY" LocalizedString="GUI_STR_HEAVY"/>
+        <DefaultLocaleElement StringID="IDS_RecycleS" LocalizedString="IDS_RecycleS"/>
+        <DefaultLocaleElement StringID="IDS_Card2S" LocalizedString="IDS_Card2S"/>
+        <DefaultLocaleElement StringID="IDS_Card1S" LocalizedString="IDS_Card1S"/>
+        <DefaultLocaleElement StringID="IDS_PlainS" LocalizedString="IDS_PlainS"/>
+        <DefaultLocaleElement StringID="IDS_Envelope" LocalizedString="IDS_Envelope"/>
+        <DefaultLocaleElement StringID="IDS_Card2" LocalizedString="IDS_Card2"/>
+        <DefaultLocaleElement StringID="IDS_Card1" LocalizedString="IDS_Card1"/>
+        <DefaultLocaleElement StringID="IDS_Transparency" LocalizedString="IDS_Transparency"/>
+        <DefaultLocaleElement StringID="IDS_Special" LocalizedString="IDS_Special"/>
+        <DefaultLocaleElement StringID="IDS_Oneside" LocalizedString="IDS_Oneside"/>
+        <DefaultLocaleElement StringID="IDS_Recycle" LocalizedString="IDS_Recycle"/>
+        <DefaultLocaleElement StringID="IDS_Plain" LocalizedString="IDS_Plain"/>
+        <DefaultLocaleElement StringID="GUI_STR_MAIN" LocalizedString="GUI_STR_MAIN"/>
+        <DefaultLocaleElement StringID="GUI_STR_NONE" LocalizedString="GUI_STR_NONE"/>
+        <DefaultLocaleElement StringID="GUI_STR_OFF" LocalizedString="GUI_STR_OFF"/>
+        <DefaultLocaleElement StringID="GUI_STR_YES" LocalizedString="GUI_STR_YES"/>
+        <DefaultLocaleElement StringID="GUI_STR_NO" LocalizedString="GUI_STR_NO"/>
+        <DefaultLocaleElement StringID="GUI_STR_AUTOMATIC" LocalizedString="GUI_STR_AUTOMATIC"/>
+        <DefaultLocaleElement StringID="GUI_STR_MANUAL" LocalizedString="GUI_STR_MANUAL"/>
+        <DefaultLocaleElement StringID="GUI_STR_ERROR_DIFFUSION" LocalizedString="GUI_STR_ERROR_DIFFUSION"/>
+        <DefaultLocaleElement StringID="GUI_STR_PERIODIC" LocalizedString="GUI_STR_PERIODIC"/>
+        <DefaultLocaleElement StringID="GUI_STR_PERCEPTUAL" LocalizedString="GUI_STR_PERCEPTUAL"/>
+        <DefaultLocaleElement StringID="GUI_STR_SATURATION" LocalizedString="GUI_STR_SATURATION"/>
+        <DefaultLocaleElement StringID="GUI_STR_PRESERVE_BLACK" LocalizedString="GUI_STR_PRESERVE_BLACK"/>
+        <DefaultLocaleElement StringID="GUI_STR_INTENT" LocalizedString="GUI_STR_INTENT"/>
+        <DefaultLocaleElement StringID="GUI_STR_COLORIMETRIC" LocalizedString="GUI_STR_COLORIMETRIC"/>
+        <DefaultLocaleElement StringID="GUI_STR_600x600" LocalizedString="GUI_STR_600x600"/>
+      </DefaultLocale>
+      <Locale>
+        <LocaleIdentifierLong Country="JP-Japan" Language="ja-Japanese"/>
+        <LocaleElement StringID="COPYRIGHT1" LocalizedString="Monotype ??�??̕]?°¿h??°C?o"/>
+      </Locale>
+    </UserInterfaceStrings>
+    <VendorExtension>
+      <mti:Defaults>
+        <mti:FixedFont DefaultSetting="Courier New"/>
+        <mti:ProportionalFont DefaultSetting="Times New Roman"/>
+        <mti:FontSize DefaultSetting="12"/>
+      </mti:Defaults>
+    </VendorExtension>
+    
+  </PrintCapabilities>
+</DeviceCapabilities>
