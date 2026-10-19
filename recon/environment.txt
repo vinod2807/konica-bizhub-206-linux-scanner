@@ -1,0 +1,2 @@
+Linux alpine-jwm 6.18.57-0-lts #1-Alpine SMP PREEMPT_DYNAMIC 2026-10-16 17:58:03 x86_64 GNU/Linux
+Alpine Linux v3.24

@@ -1,0 +1,33 @@
+
+  # sane-find-scanner will now attempt to detect your scanner. If the
+  # result is different from what you expected, first make sure your
+  # scanner is powered up and properly connected to your computer.
+
+  # No SCSI scanners found. If you expected something different, make sure that
+  # you have loaded a kernel SCSI driver for your SCSI adapter.
+  # Also you need support for SCSI Generic (sg) in your operating system.
+  # If using Linux, try "modprobe sg".
+
+found possible USB scanner (vendor=0x132b [KONICA MINOLTA], product=0x232b [KONICA MINOLTA 206]) at libusb:001:004
+could not open USB device 0x1d6b/0x0001 at 009:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0002 at 002:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 004:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 006:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 008:001: Access denied (insufficient permissions)
+could not open USB device 0x17ef/0x608d at 005:002: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0002 at 001:001: Access denied (insufficient permissions)
+could not open USB device 0x1c4f/0x0002 at 007:002: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 007:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 003:001: Access denied (insufficient permissions)
+could not open USB device 0x1d6b/0x0001 at 005:001: Access denied (insufficient permissions)
+  # Your USB scanner was (probably) detected. It may or may not be supported by
+  # SANE. Try scanimage -L and read the backend's manpage.
+
+  # Not checking for parallel port scanners.
+
+  # Most Scanners connected to the parallel port or other proprietary ports
+  # can't be detected by this program.
+
+  # You may want to run this program as root to find all devices. Once you
+  # found the scanner devices, be sure to adjust access permissions as
+  # necessary.

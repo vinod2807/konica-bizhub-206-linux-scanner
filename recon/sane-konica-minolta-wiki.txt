@@ -1,0 +1,205 @@
+ 
+ 
+ 
+ 
+ Linux scanner drivers (SANE backends) for KONICA MINOLTA devices [Reinhold's Wiki] 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ var NS='hardware';var JSINFO = {"es_order_type":"nested","plugin_folded":{"hide":"zuklappen","reveal":"aufklappen"},"isadmin":0,"isauth":0,"move_renameokay":false,"move_allowrename":false,"id":"hardware:sane_konica_minolta","namespace":"hardware","ACT":"show","useHeadingNavigation":1,"useHeadingContent":1};(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement); 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+ 
+ 
+ zum Inhalt springen 
+ 
+
+ Reinhold's Wiki 
+ 
+
+ 
+ 
+ 
+ Benutzer-Werkzeuge 
+ 
+ Anmelden 
+ 
+ 
+ 
+ 
+ Webseiten-Werkzeuge 
+ Suche 
+ Werkzeuge Ältere Versionen Links hierher Alles aus-/einklappen Letzte Änderungen Medien-Manager Übersicht Anmelden &gt; 
+ 
+ Letzte Änderungen Medien-Manager Übersicht 
+ 
+
+ 
+
+ 
+ 
+ Sie befinden sich hier: Reinhold&#039;s Various Wiki topics » Hardware information » Linux scanner drivers (SANE backends) for KONICA MINOLTA devices 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+ 
+ 
+ hardware:sane_konica_minolta 
+
+ 
+ 
+ 
+ 
+ Inhaltsverzeichnis 
+ 
+
+ 
+ Linux scanner drivers (SANE backends) for KONICA MINOLTA devices 
+ 
+ Magicolor devices 
+ Bizhub devices 
+ UDP SNMP forwarding over SSH-Tunnel 
+ 
+ 
+ 
+ 
+ 
+
+ Linux scanner drivers (SANE backends) for KONICA MINOLTA devices 
+ 
+
+ 
+
+ Magicolor devices 
+ 
+
+ 
+These devices have a binary protocol, where each command starts with the hexadecimal byte &#039;03&#039; and each network command with &#039;04&#039;. Known devices using this protocol are:
+ 
+ 
+ KONICA MINOLTA magicolor 1690MF 
+ 
+ 
+
+ 
+Support for this scanner is already included in the Sane scanner driver (using the magicolor backend).
+ 
+
+ 
+Further information:
+ 
+ 
+ The scanning protocol of magicolor devices 
+ 
+ The SANE backend for magicolor devices 
+ 
+ 
+
+ 
+
+ Bizhub devices 
+ 
+
+ 
+These devices have a text-based protocol (SCL-derived), where each command starts with the escape sequence (hexadecimal &#039;1b&#039;), but only after a header of 12 bytes (binary, starting with hexadecimal &#039;02&#039;). Known devices using this protocol are:
+ 
+ 
+ KONICA MINOLTA bizhub C203 
+ 
+ 
+
+ 
+Further information:
+ 
+ 
+ The scanning protocol of bizhub devices 
+ 
+ The SANE backend for bizhub devices 
+ 
+ 
+
+ 
+Support for these scanners is not included in the Sane scanner library, and I have no plans to implement them.
+ 
+
+ 
+
+ UDP SNMP forwarding over SSH-Tunnel 
+ 
+ ssh -L 1616:localhost:1616 root@k &quot;socat tcp4-listen:1616,reuseaddr,fork UDP:10.0.0.5:161&quot;
+ssh root@`hostname` &quot;socat -T15 udp4-recvfrom:161,reuseaddr,fork tcp:localhost:1616&quot; 
+
+ 
+
+ 
+ 
+ 
+
+ hardware/sane_konica_minolta.txt · Zuletzt geändert: 2017/05/02 14:13 von reinhold 
+
+ 
+ 
+ 
+
+ 
+ 
+ Seiten-Werkzeuge 
+ 
+ 
+ Ältere Versionen Links hierher Alles aus-/einklappen Nach oben 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-donate.gif" width="80" height="15" alt="Donate" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-php.gif" width="80" height="15" alt="Powered by PHP" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-html5.png" width="80" height="15" alt="Valid HTML5" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-css.png" width="80" height="15" alt="Valid CSS" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-dw.png" width="80" height="15"
+ alt="Driven by DokuWiki" /> 
+ 
+
+ 
+ 
+
+ 
+ 
+ 

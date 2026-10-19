@@ -1,0 +1,16 @@
+gcc-15.2.0-r5
+gcc-gdb-15.2.0-r5
+libgcc-15.2.0-r5
+libgcc-static-15.2.0-r5
+libusb-1.0.30-r0
+python3-3.14.8-r0
+python3-pyc-3.14.8-r0
+python3-pycache-pyc0-3.14.8-r0
+sane-1.4.0-r4
+sane-airscan-0.99.36-r0
+sane-backend-epson2-1.4.0-r4
+sane-backend-epsonds-1.4.0-r4
+sane-udev-1.4.0-r4
+sane-utils-1.4.0-r4
+simple-scan-50.0-r0
+usbutils-019-r0

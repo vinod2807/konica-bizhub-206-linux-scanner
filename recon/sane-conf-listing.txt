@@ -1,0 +1,19 @@
+/etc/sane.d:
+total 36
+drwxr-xr-x  3 root root 4096 Oct 19 18:18 .
+drwxr-xr-x 51 root root 4096 Oct 19 18:12 ..
+-rw-r--r--  1 root root 4124 Sep 29  2025 airscan.conf
+-rw-r--r--  1 root root  173 Jun  1 09:52 dll.aliases
+-rw-r--r--  1 root root    0 Jun  1 09:52 dll.conf
+drwxr-xr-x  2 root root 4096 Oct 19 18:19 dll.d
+-rw-r--r--  1 root root  374 Jun  1 09:52 epson2.conf
+-rw-r--r--  1 root root  321 Oct 19 18:19 epsonds.conf
+-rw-r--r--  1 root root   33 Jun  1 09:52 lexmark_x2600.conf
+
+/etc/sane.d/dll.d:
+total 20
+drwxr-xr-x 2 root root 4096 Oct 19 18:19 .
+drwxr-xr-x 3 root root 4096 Oct 19 18:18 ..
+-rw-r--r-- 1 root root   77 Oct 19 18:19 airscan
+-rw-r--r-- 1 root root   39 Oct 19 18:19 epson2
+-rw-r--r-- 1 root root    8 Jun  1 09:52 epsonds

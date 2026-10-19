@@ -1,0 +1,59 @@
+ iVina ,
+ Kodak ,
+ Komodo ,
+ KONICA MINOLTA ,
+ Kyocera ,
+ LEO ,
+ Lexmark ,
+ Linotype Hell ,
+ Logitech ,
+ Medion/Lifetec/Tevion/Cytron ,
+ Memorex ,
+ Micromaxx ,
+ Microstar ,
+ Microtek ,
+ Minolta ,
+ Minolta-QMS ,
+ Mitsubishi ,
+ Mustek ,
+ NeatReceipts ,
+ NEC ,
+ Network ,
+ Nikon ,
+ Nortek ,
+ OKI ,
+ Olivetti ,
+ Olympus ,
+ Optoelectronics ,
+ Optrox ,
+ Packard Bell ,
+--
+ sane-sceptre 
+ 
+ 
+ Manufacturer: KONICA MINOLTA 
+ 
+ Link(s): 
+ http://www.konicaminolta.com/ 
+ 
+ 
+ 
+ Model 
+ Interface 
+ USB id 
+ Status 
+ Comment 
+ Backend 
+ Manpage 
+ 
+ BizHub 162/132 
+ USB Network 
+ &nbsp; 
+ Unsupported 
+ Uses a similar protocol as the magicolor 1690MF, according to Ilia Sotnikov. 
+ 
+ magicolor 
+ (1.0.0 (unmaintained))
+ 
+ sane-magicolor 
+ 

@@ -1,0 +1,2268 @@
+ 
+ 
+ 
+ 
+ The Scanning Protocol of the Konica Minolta bizhub devices [Reinhold's Wiki] 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ var NS='hardware';var JSINFO = {"es_order_type":"nested","plugin_folded":{"hide":"zuklappen","reveal":"aufklappen"},"isadmin":0,"isauth":0,"move_renameokay":false,"move_allowrename":false,"id":"hardware:bizhub_scan","namespace":"hardware","ACT":"show","useHeadingNavigation":1,"useHeadingContent":1};(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement); 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+ 
+ 
+ zum Inhalt springen 
+ 
+
+ Reinhold's Wiki 
+ 
+
+ 
+ 
+ 
+ Benutzer-Werkzeuge 
+ 
+ Anmelden 
+ 
+ 
+ 
+ 
+ Webseiten-Werkzeuge 
+ Suche 
+ Werkzeuge Ältere Versionen Links hierher Alles aus-/einklappen Letzte Änderungen Medien-Manager Übersicht Anmelden &gt; 
+ 
+ Letzte Änderungen Medien-Manager Übersicht 
+ 
+
+ 
+
+ 
+ 
+ Sie befinden sich hier: Reinhold&#039;s Various Wiki topics » Hardware information » The Scanning Protocol of the Konica Minolta bizhub devices 
+ 
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+ 
+ 
+ hardware:bizhub_scan 
+
+ 
+ 
+ 
+ 
+ Inhaltsverzeichnis 
+ 
+
+ 
+ The Scanning Protocol of the Konica Minolta bizhub devices 
+ 
+ Devices 
+ Driver settings 
+ 
+ 
+ Sample captured communication 
+ Device Auto-Detection 
+ 
+ SRVLOC / SLP 
+ SNMP Detection 
+ 
+ 
+ General communication structure (Packet header, request/response packets) 
+ 
+ The packet header 
+ Packet data format for requesting data 
+ Packet contents format (SCL) 
+ 
+ 
+ Supported SCL commands 
+ 
+ ESC E ... WELCOME 
+ ESC*s##E ... Inquire device parameter 
+ ESC*s##U ... Upload binary data from Scanner 
+ Esc*s##r$$V ... Function success/failure response 
+ Esc*w$U[...] ... Login / Logout 
+ Esc*w$J ... Lock/Unlock scanner 
+ Esc*z##G ... Setting image parameters on C353series 
+ Esc*z##H ... Setting image parameters on 423series 
+ Esc*w0W ... Wait for button 
+ ESC*f0S ... Scan Window 
+ Esc*w0S ... Read scan data 
+ Esc*h$B ... Select &amp; Lock Box; Unlock Box 
+ Esc*h$$F ... TODO: Unknown 
+ Esc*h$$K[...] ... Download Preview Image 
+ Esc*h$$L[...] ... FIXME: Select image in Box, select settings 
+ ESC*oE ... Clear errors 
+ 
+ 
+ Known SCL scanner parameters 
+ Error codes (returned to 259 requests) 
+ Structures of binary parameters 
+ 
+ 258 ... Scanner capabilities 
+ 273 ... Scanner capabilities 
+ 264 ... SNMP identification 
+ 265 ... Image settings 
+ 270 ... Scanner installed hardware? FIXME 
+ 
+ 
+ All device parameters, to which the 363 answers 
+ Sequence of commands of a typical communication (Pseudo-code) 
+ 
+ 
+ 
+ Connecting to the device 
+ Opening the device 
+ Scanning operation 
+ Closing the session / device 
+ Error handling 
+ 
+ 
+ 
+ 
+ Image format 
+ 
+ 
+ 
+ 
+
+ The Scanning Protocol of the Konica Minolta bizhub devices 
+ 
+
+ 
+All contents on this page were obtained through observing the communication between the Windows TWAIN drivers (using GIMP) and the device connected on the LAN (using wireshark), plus some documents found on the internet (in particular, the SCL specification for HP scanners, written in 1999). The purpose is solely for documentational purposes, so that I will be able to write a proper SANE backend to support these devices. I do not have any access to any internal documentation of the device or protocol :( I also did not disassemble the windows driver, just looked at the commands sent over the local network.
+ 
+
+ 
+
+ Devices 
+ 
+
+ 
+The information on this page applies (at least) to the following devices:
+ 
+ 
+ KONICA MINOLTA bizhub C203 
+ 
+ KONICA MINOLTA bizhub 363 
+ 
+ 
+
+ 
+Other devices might also use this type of scanning protocol, but I have not had access to them so far.
+ 
+
+ 
+The different devices have a similar command set, but slight differences exist.
+ 
+ 
+	 
+	 
+		 Device Series 
+	 
+	 
+	 
+		 bizhub C203 C353 
+	 
+	 
+		 bizhub 363 423 
+	 
+	 
+		 ???? ??? 
+	 
+ 
+
+ 
+
+ Driver settings 
+ 
+
+ 
+The Windows TWAIN driver has lots of settings, some of which are processed by the scanner (and need to be implemented in the SANE driver, too), some of which are applied by the scanner driver after the data is obtained from the scanner. These don&#039;t have to be implemented in SANE.
+ 
+ 
+	 
+	 
+		 Setting Proc. by Comment Where to set 
+	 
+	 
+	 
+		 Scan mode scanner B/W, Grayscale, Color byte 5-6 of *z27H / *z24G 
+	 
+	 
+		 Preview scan scanner byte 9-10? / 19-20 of *z27H / *z24G 
+	 
+	 
+		 Resolution scanner 100-600 dpi byte 1-2 (x) and 3-4 (y) of *z27H / *z24G 
+	 
+	 
+		 Compression scanner none, JPEG byte 9-10 of *z27H / *z24G 
+	 
+	 
+		 Scan source driver ADF / FBF If paper in ADF (param 20201), use ADF, otherwise use FBF (compare with selected setting!) 
+	 
+	 
+		 ADF duplex scanner check first if present / duplex bytes 11-12 of *z27H / *z24G 
+	 
+	 
+		 ADF duplex binding scanner left/right/top edge byte 17-18 of *z27H / *z24G 
+	 
+	 
+		 Paper size scanner Index (pre-defined paper sizes) byte 23-24 of *z27H / *z24G 
+	 
+	 
+		 Scan area unit driver Scanner always returns whole paper size scan 
+	 
+	 
+		 Rotation scanner 0=no, 1=180, 2=counter-clw., 3=clockwise byte 15 of *z27H / *z24G 
+	 
+	 
+		 Wait for btn drv. sc. Loop until btn pressed. How to cancel? *w0W command 
+	 
+	 
+		 Contrast driver 
+	 
+	 
+		 Halftone rem. driver 
+	 
+	 
+		 Deskew driver 
+	 
+	 
+		 Paper type scanner Index of pre-defined paper types byte 21-22 of *z27H / *z24G 
+	 
+	 
+		 Bg removal driver? combobox 
+	 
+	 
+		 Bg remove scanner advanced: Auto / -6… 2 byte 13-14 of *z27H / *z24G 
+	 
+	 
+		 Decolorize Bg driver? combobox 
+	 
+	 
+		 Paper col. rem. scanner advanced: Auto / -6… 2 byte 25-26 of *z27H 
+	 
+	 
+		 Batch scan? driver Loop while ADF is loaded 
+	 
+ 
+
+ 
+
+ Sample captured communication 
+ 
+
+ 
+bizhub C203:
+ 
+ 
+ Initial communication to connect and open the scanner (until scanning window appears) 
+ 
+ Preview scan of whole FBF area in B/W 
+ 
+ Preview scan of part of FBF area in Grayscale 
+ 
+ Grayscale scan in 100dpi(200dpi) from FBF, part of area, Wait for button 
+ 
+ B/W scan in 600dpi from FBF, part of area, contrast set to low 
+ 
+ 100dpi scan A4 landscape in BW from simplex ADF 
+ 
+ 100dpi scan A4 portrait in BW from duplex ADF 
+ 
+ 
+
+ 
+bizhub 363:
+ 
+ 
+ TODO 
+ 
+ 
+
+ 
+
+ Device Auto-Detection 
+ 
+
+ 
+
+ SRVLOC / SLP 
+ 
+
+ 
+The Windows driver tries to detect the scanner via SVRLOC (SLP), using either of the two services
+ 
+ 
+ service:KMRealTWScan0200.KONICAMINOLTA (for real scans) 
+ 
+ service:KMHDDTWScan0200.KONICAMINOLTA (for retrieving documents from the harddisk of the copier) 
+ 
+ 
+
+ 
+A broadcast example can be found here .
+ 
+
+ 
+Unfortunately, it seems that the scanner is not responding to SLP requests (even though that setting is enabled), so the auto-detection does not work with the Windows TWAIN driver, either.
+ 
+
+ 
+
+ SNMP Detection 
+ 
+
+ 
+The bizhub device can be detected via SNMP similar to the Magicolor devices . The sysObjectID for bizhub devices starts with
+ 
+ 
+ 1.3.6.1.2.1.1.2.0 (SNMPv2-MIB::sysObjectID.0) = OID: SNMPv2-SMI::enterprises.18334.1.1.1.2.1.xx.x.x 
+ 
+ 
+
+ 
+
+ General communication structure (Packet header, request/response packets) 
+ 
+
+ 
+The network communication uses port 59158 on the scanner/copier.
+ 
+
+ 
+In contrast to the protocol of the magicolor 1690mf , there is no particular LAN communication wrapper.
+ 
+
+ 
+Instead, all commands and all responses have a 12-byte header of the form tt 00 00 00 ss ss ss ss xx 00 00 yy , where „tt“ indicates the target („02“ for scanner access, „01“ for box access, i.e. scans saved on the scanner&#039;s HDD), „ss ss ss ss“ indicates the whole size of the packet (header+data), „xx“ indicates the type of request (read or write) and „yy“ indicates the direction. After this header, the actual data bytes of the packet follow (typically in Scanner command language (SCL) syntax, see below)
+ 
+
+ 
+The devices do not automatically return data, but instead only respond to particular read requests (similar to how USB communication between host and device). So, a function call consists of three steps:
+ 
+ 
+ Send the function call with possible arguments to the device (xx=01, yy=00) 
+ 
+ Send a data request packet to the device (xx=02, yy=00) 
+ 
+ Receive data packet from the device (xx=01, yy=80) 
+ 
+ 
+
+ 
+A typical function call is:
+ 
+ 02 00 00 00 15 00 00 00 01 00 00 00 1b 2a 73 32 31 30 30 34 45 .*s21004 E (send *s21004 function call)
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00 (request response)
+ 02 00 00 00 17 00 00 00 01 00 00 80 1b 2a 73 32 31 30 30 34 64 33 56 .*s21004 d3V (response *s21004 by scanner) 
+
+ 
+
+ The packet header 
+ 
+ 
+	 
+	 
+		 general format (12 bytes): 02 00 00 00 ss ss ss ss tt 00 00 dd 
+	 
+	 
+	 
+		     bytes 1-4: Access target 01 00 00 00 for HDD, 02 00 00 00 for real scanner 
+	 
+	 
+		     bytes 5-8: packet size little endian, #bytes of header+data 
+	 
+	 
+		     byte 9: packet type 01 for data sending, 02 for data request, 04 for no data available 
+	 
+	 
+		     bytes 10-11: Unknown always 00 00 
+	 
+	 
+		     byte 12: direction 00 for sent by computer, 80 for sent by scanner 
+	 
+ 
+
+ 
+After the header, the data content of the packet is sent. The amount is specified by bytes 5-8 of the header.
+ 
+
+ 
+
+ Packet data format for requesting data 
+ 
+
+ 
+If a response to a function call is requested by the scanner, a request with the following form needs to be sent to the scanner, after which a sending data packet is returned by the scanner:
+ 
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 
+
+ 
+The first 12 bytes are the usual packet header, the remaining 4 bytes indicate :
+ 
+ 
+ For inquire calls: 00 01 00 00 
+ 
+ For binary uploads: data size??? 
+ 
+ For scan data request: data size? 
+ 
+ 
+
+ 
+
+ Packet contents format (SCL) 
+ 
+
+ 
+The protocol is based on HP&#039;s Scanner Command Language (SCL). See e.g.
+ 
+ 
+ http://www.josefsipek.net/mirrors/www.nondot.org/sabre/os/incoming/HP-ScanJet-SCL.TXT 
+ 
+ http://cubeman.org/manuals/sclv10.doc , http://cubexyz.blogspot.com/2008/09/programming-flatbed-scanner.html 
+ 
+ http://www.freepatentsonline.com/6237032.html for a number of *s… commands 
+ 
+ 
+
+ 
+Each function call and each response has the following form (byte-wise, where the spaces between the actual bytes are not part of the communication):
+ 
+ 
+	 
+	 
+		 ESC * func ##1 param1 ##2 param2 … ##n Paramn [opional_binary_data] 
+	 
+	 
+	 
+		     byte 1: ESC (0x1b) Escape sequence 
+	 
+	 
+		     byte 2: * (0x2a) fixed parameterized character 
+	 
+	 
+		     byte 3: function Values: a-z, indicating the type of operation 
+	 
+	 
+		     ##i parami Arbitrary number of numeric values and letter parameter (a-z) pairs, indicating particular functions and their arguments 
+	 
+	 
+		     ##n Paramn Last value/param pair uses the same syntax, only the parameter is uppercase (A-Z) to indicate the end of the command 
+	 
+	 
+		     [optional_binary_data] Binary data is optionally sent after the end of the command. Its size should be indicated by the value of a w/W parameter 
+	 
+ 
+
+ 
+
+ Supported SCL commands 
+ 
+
+ 
+Note: In all examples, the first part is the actual data (hexadecimal, bytes separated by spaces) transferred, a human-readable ASCII representation is shown at the end of the line (only the command, not the 12 byte header), where ESC indicates the escape character 0x1b.
+A $$ or ## in a function or return value indicates a numeric value, mostly one of the variables listed at the end of this section, or its value.
+ 
+ Known SCL commands used by the bizhub devices: 
+	 
+	 
+		 Command Return command Parameter Short description Series 
+	 
+	 
+	 
+		 EscE Esc*s##r$$V 20112 Welcome all 
+	 
+	 
+		 Obtaining information from the scanner 
+	 
+	 
+		 Esc*s##E Esc*s##d$$V ## Inquire device parameter ## all 
+	 
+	 
+		 Esc*s##U Esc*s##t$$W[…] ## Request binary data of a device variable ## all 
+	 
+	 
+		 Esc*s##tN ## NULL-return of binary data in variable ## all 
+	 
+	 
+		 Esc*??? Esc*s##r$$V (1) Returns value (mostly success/failure) of a function call ## all 
+	 
+	 
+		 Esc*s##t$$V[…] (2) Returns $$ byte of binary return value of function call ## all 
+	 
+	 
+		 Functions 
+	 
+	 
+		 Esc*w#U[…] (1) 20119 Login(# bytes of login data); Logout if #=-1 (423/?) 
+	 
+	 
+		 Esc*w#J (1) 20100 Lock/unlock scanner all 
+	 
+	 
+		 Esc*z##G[…] (1) 20116 Setting image parameters (##=24, i.e. 24 bytes) C353 
+	 
+	 
+		 Esc*z##H[…] (1) 20122 Setting image parameters (##=27, i.e. 27 bytes) 423 
+	 
+	 
+		 Esc*w0W (1) 20101 Wait for button all 
+	 
+	 
+		 Esc*f0S (1) 20113 Scan Window all 
+	 
+	 
+		 Esc*w0S binary data - Read scan data all 
+	 
+	 
+		 Box handling 
+	 
+	 
+		 Esc*h$B (1) 21100 Select/Lock Box $ (unlock if $=-1) (423/?) 
+	 
+	 
+		 Esc*h$$F (1) 21100 ???? (423/?) 
+	 
+	 
+		 Esc*h$$K (2) 21111 Retrieve preview image ($$ bytes of arguments) (423/?) 
+	 
+	 
+		 Esc*h$$L (2) 21116 : Image settings/select image; Return: image size in bytes (423/?) 
+	 
+	 
+		 Error handling 
+	 
+	 
+		 Esc*oE - Clear error stack all 
+	 
+ 
+
+ 
+ 
+
+ ESC E ... WELCOME 
+ 
+
+ 
+Handshake, very first escape sequence sent to the scanner upon startup (Only for real scanning, not for HDD access). Returned is an ESC*20112r1V command (success of function).
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC E 
+	 
+	 
+	 
+		     no parameters 
+	 
+	 
+		 Return data: ESC*s20100r$V 
+	 
+	 
+		     20112r Variable 20112 indicates connection success 
+	 
+	 
+		     $V Parameter V: success status, 1=OK, 0=Failure 
+	 
+ 
+
+ 
+Example:
+ 
+ 02 00 00 00 0e 00 00 00 01 00 00 00 1b 45 ESC E
+02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80 1b 2a 73 32 30 31 31 32 72 31 56 ESC*s20112 r1V 
+
+ 
+
+ ESC*s##E ... Inquire device parameter 
+ 
+
+ 
+Request the value of a device parameter from the scanner (varialbe indicated by ## parameter value).
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*s##E 
+	 
+	 
+	 
+		     ##E Parameter E: Integer indicating the desired variable (see below for a complete list) 
+	 
+	 
+		 Return data: ESC*s##d$$V (if not-empty) 
+	 
+	 
+		     ##d Parameter d: Integer indicating the returned variable 
+	 
+	 
+		     $$V Parameter V: Value of the requested variable 
+	 
+	 
+		 NULL response: ESC*s##dN 
+	 
+	 
+		     ##d Parameter t: Integer indicating the returned variable 
+	 
+	 
+		     N Parameter N: Indicating a NULL response 
+	 
+ 
+
+ 
+Example, requesting (and receiving) the binary value of variable 21004 (value is 3):
+ 
+ 02 00 00 00 15 00 00 00 01 00 00 00 1b 2a 73 32 31 30 30 34 45 ESC*s21004 E
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80 1b 2a 73 32 31 30 30 34 64 33 56 ESC*s21004 d3V 
+
+ 
+
+ ESC*s##U ... Upload binary data from Scanner 
+ 
+
+ 
+Request a binary value (type indicated by ## parameter value) from the scanner.
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*s##U 
+	 
+	 
+	 
+		     ##U Parameter U: Integer indicating the desired variable (see below for a complete list) 
+	 
+	 
+		 Return data: ESC*s##t$$W[data] (if not-empty) 
+	 
+	 
+		     ##t Parameter t: Integer indicating the returned variable 
+	 
+	 
+		     $$W Parameter W: Length of binary data 
+	 
+	 
+		     [data] Binary data with length as given in the W parameter 
+	 
+	 
+		 NULL response: ESC*s##tN (empty) 
+	 
+	 
+		     ##t Parameter t: Integer indicating the returned variable 
+	 
+	 
+		     N Parameter N: Indicating a NULL response 
+	 
+ 
+
+ 
+Example, requesting (and receiving) the binary value of variable 265:
+ 
+ 02 00 00 00 13 00 00 00 01 00 00 00 1b 2a 73 32 36 35 55 ESC*s265U
+ 02 00 00 00 10 00 00 00 02 00 00 00 08 01 00 00
+ 02 00 00 00 1d 00 00 00 01 00 00 80
+ 1b 2a 73 32 36 35 74 38 57 78 06 cf 00 22 09 00 00 00 ESC*s265t8 Wx...&quot;.. 
+
+ 
+
+ Esc*s##r$$V ... Function success/failure response 
+ 
+
+ 
+Response indicating the success or failure of a function call.
+ 
+ 
+	 
+	 
+		 Return data: ESC*s##r$$V 
+	 
+	 
+	 
+		     ##r Parameter r: Function for which the success is indicated ( see below ) 
+	 
+	 
+		     $$V Parameter E: success status (1=SUCCESS, 2=FAILURE) 
+	 
+ 
+
+ 
+
+ Esc*w$U[...] ... Login / Logout 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*w$U 
+	 
+	 
+	 
+		     $U Parameter J: #bytes of login data; $=0 means „Logout“ 
+	 
+	 
+		 Return data: ESC*s20119r$V 
+	 
+	 
+		     20119r Variable 20119 indicates success value of function 
+	 
+	 
+		     $V Parameter V: success status, 1=Login/out OK, 0=Failure 
+	 
+ 
+
+ 
+User name is „limited“ to 64 characters, then come 94 0x00 bytes, then apparently a hashed password (16 bytes).
+ 
+
+ 
+Data format:
+ 
+ 
+	 
+	 
+		 field length comments/description 
+	 
+	 
+	 
+		 username up to 64 bytes clear-text username, variable length 
+	 
+	 
+		 delimiter 94 bytes all 0x00 
+	 
+	 
+		 password hash 0 or 16 bytes (optional) password hash; key from 261 param; not present for public login 
+	 
+ 
+
+ 
+Public login has 100 bytes (6 user name, 94 delimiter), user login has up to 174 bytes (up to 64 user name, 94 delimiter, 16 password hash)
+ 
+
+ 
+Example:
+ 
+ 1b 2a 77 31 30 30 55 70 75 62 6c 69 63 00 00 00 ESC*w100Upublic
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+ 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+ 00 00 00 00 00 00 00 00 00 00 00 
+ 01 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 01 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 30 31 31 39 72 31 56 ESC*s20119 r1V 
+
+ 
+
+ Esc*w$J ... Lock/Unlock scanner 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*w$J 
+	 
+	 
+	 
+		     $J Parameter J: 0=lock scanner, 1=unlock scanner 
+	 
+	 
+		 Return data: ESC*s20100r$V 
+	 
+	 
+		     20100r Variable 20100 indicates success value of function 
+	 
+	 
+		     $V Parameter V: success status, 1=OK, 0=Failure 
+	 
+ 
+
+ 
+Example:
+ 
+ 02 00 00 00 11 00 00 00 01 00 00 00 1b 2a 77 30 4a ESC*w0J
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 30 31 30 30 72 31 56 ESC*s20100 r1V 
+
+ 
+
+ Esc*z##G ... Setting image parameters on C353series 
+ 
+
+ 
+Image parameters for the scan. All values are sent in little endian, but in the table they are shown as human-readable hex numbers
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*z##G[24byte_binary_data] 
+	 
+	 
+	 
+		     ##G Parameter G: Size of image data parameters (24 bytes), always 24G 
+	 
+	 
+		     24 bytes binary data 
+	 
+	 
+		 Byte 1-2: x Resolution (little endian) 0x00c8=200dpi, 0x012c=300dpi; 100dpi uses 200dpi! 
+	 
+	 
+		 Byte 3-4: y Resolution (little endian) 0x00c8=200dpi, 0x012c=300dpi; 100dpi uses 200dpi! 
+	 
+	 
+		 Byte 5-6: Color mode: Unknown, 0=BW, 1=Gray, ??=Color (Preview: 0x00 for BW, 0x04 for Gray, 0x05 for Color; Scan: ???) 
+	 
+	 
+		 Byte 7-8: Bits per pixel BW: 0x0001, Gray: 0x008, Color: 0x0018 (=24) 
+	 
+	 
+		 Byte 9-10: Unknown, 0x0082 for BW preview 0x0000 for all other previews; 0x0081 for Grayscale JPEG compression 
+	 
+	 
+		 Byte 11-12: Duplex 0x0000=simplex, 0x0001=duplex 
+	 
+	 
+		 Byte 13-14: Remove Background range -6… 2 ( fa ff =0xfffa to 02 00 =0x0002), 0x0100 ( 00 01 ) for Auto 
+	 
+	 
+		 Byte 15-16: Rotation 0x0000=no rotation, 0x0001=rotate 180, 0x0002=counter-clockwise (270), 0x0003=clockwise (90) 
+	 
+	 
+		 Byte 17-18: Duplex binding 0x0000=simplex, 0x0001=left binding, 0x0002=top binding, 0x0003=right binding, 0x00ff=autodetect binding 
+	 
+	 
+		 Byte 19-20: Preview/Final scan 0x0000=Preview, 0x0001=Normal scan 
+	 
+	 
+		 Byte 21-22: Image type see below for image types 
+	 
+	 
+		 Byte 23-24: Paper size / Image area? First half-byte: 0x0=portrait,0x1=landscape; see below ( ESC*z##H ) for the paper formats 
+	 
+	 
+		 Return data: ESC*s20116r1V 
+	 
+	 
+		     20116r Variable 20116: See below 
+	 
+	 
+		     1V Return value: 1..OK, 0..???? 
+	 
+ 
+
+ 
+Example (BW preview scan from FBF, whole area):
+ 
+ 02 00 00 00 2a 00 00 00 01 00 00 00
+ 1b 2a 7a 32 34 47 c8 00 c8 00 00 00 01 00 82 00 ESC*z24G
+ 00 00 00 01 00 00 00 00 00 00 02 00 50 15
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 30 31 31 36 72 31 56 ESC*s20116 r1V 
+
+ 
+
+ Esc*z##H ... Setting image parameters on 423series 
+ 
+
+ 
+Image parameters for the scan. All values are sent in little endian, but in the table they are shown as human-readable hex numbers
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*z##H[27byte_binary_data] 
+	 
+	 
+	 
+		     ##H Parameter H: Size of image data parameters (27 bytes), always 27H 
+	 
+	 
+		     27 bytes binary data 
+	 
+	 
+		 Byte 1-2: x Resolution (little endian) 0x00c8=200dpi, 0x012c=300dpi; 100dpi uses 200dpi! 
+	 
+	 
+		 Byte 3-4: y Resolution (little endian) 0x00c8=200dpi, 0x012c=300dpi; 100dpi uses 200dpi! 
+	 
+	 
+		 Byte 5-6: Color mode 0x0000=B/W, 0x0004=Grayscale, 0x0005=Color 
+	 
+	 
+		 Byte 7-8: Bits per pixel BW: 0x0001, Gray: 0x008, Color: 0x0018 (=24) 
+	 
+	 
+		 Byte 9-10: Data compression format 0x0000=No compression, 0x0081=JPEG compression, 0x0082=BW pixelwise (1 byte contains 8 pixel values) 
+	 
+	 
+		 Byte 11-12: Duplex 0x0000=simplex, 0x0001=duplex 
+	 
+	 
+		 Byte 13-14: Remove Background range -6… 2 ( fa ff =0xfffa to 02 00 =0x0002), 0x0100 ( 00 01 ) for Auto 
+	 
+	 
+		 Byte 15-16: Rotation 0x0000=no rotation, 0x0001=rotate 180, 0x0002=counter-clockwise (270), 0x0003=clockwise (90) 
+	 
+	 
+		 Byte 17-18: Duplex binding 0x0000=simplex, 0x0001=left binding, 0x0002=top binding, 0x0003=right binding, 0x00ff=autodetect binding 
+	 
+	 
+		 Byte 19-20: Preview/Final scan 0x0000=Preview, 0x0001=Normal scan 
+	 
+	 
+		 Byte 21-22: Image type see below for image types 
+	 
+	 
+		 Byte 23-24: Paper size / Image area First half-byte: 0x0=portrait,0x1=landscape; Rest: Paper format (see table below for a list) 
+	 
+	 
+		 Byte 25-26: Paper discoloration range -6… 2 ( fa ff =0xfffa to 02 00 =0x0002), 0x0100 ( 00 01 ) for Auto 
+	 
+	 
+		 Byte 27: Unknown 0x00 
+	 
+	 
+		 Return data: ESC*s20122r1V 
+	 
+	 
+		     20122r Variable 20122: See below 
+	 
+	 
+		     1V Return value: 1..OK, 0..ERROR 
+	 
+ 
+
+ 
+Example (BW preview scan from FBF, whole area):
+ 
+ 02 00 00 00 2d 00 00 00 01 00 00 00
+ 1b 2a 7a 32 37 48 c8 00 c8 00 00 00 01 00 82 00 ESC*z27H
+ 00 00 02 00 00 00 00 00 00 00 06 00 63 0e 00 01 00
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 30 31 32 32 72 31 56 ESC*s20122 r1V 
+ 
+	 
+	 
+		 Pixel @ 200dpi Pixel @ 200dpi Inch mm 
+	 
+	 
+		 Paper size ID Width Height Width (dec) Height (dec) Width (dec) Height (dec) Width Height 
+	 
+	 
+	 
+		 Auto size 0x0000 
+	 
+	 
+		 whole area 0x1550 0x0d48 0x0922 3400 2338 17 11,69 431,8 296,9 
+	 
+	 
+		 A3 SEF 0x1103 0x0ceb 0x0922 3307 2338 16,535 11,69 420,0 296,9 
+	 
+	 
+		 A4 SEF (landscape) 0x1104 0x0922 0x0675 2338 1653 11,69 8,265 296,9 209,9 
+	 
+	 
+		 A4 LEF(portrait) 0x0104 0x0675 0x0922 1653 2338 8,265 11,69 209,9 296,9 
+	 
+	 
+		 A5 SEF 0x1105 0x0675 0x04d8 1653 1240 8,265 6,2 209,9 157,5 
+	 
+	 
+		 A5 LEF 0x0105 0x04d8 0x0675 1240 1653 6,2 8,265 157,5 209,9 
+	 
+	 
+		 A6 SEF 0x1106 0x04d8 0x033a 1240 826 6,2 4,13 157,5 104,9 
+	 
+	 
+		 JIS B4 SEF 0x1204 0x0b32 0x07e7 2866 2023 14,33 10,115 364,0 256,9 
+	 
+	 
+		 JIS B5 SEF 0x1205 0x07e7 0x0599 2023 1433 10,115 7,165 256,9 182,0 
+	 
+	 
+		 JIS B5 LEF 0x0205 0x0599 0x07e7 1433 2023 7,165 10,115 182,0 256,9 
+	 
+	 
+		 JIS B6 SEF 0x1206 0x0599 0x03ef 1433 1007 7,165 5,035 182,0 127,9 
+	 
+	 
+		 11×17 SEF 0x1605 0x0d48 0x0898 3400 2200 17 11 431,8 279,4 
+	 
+	 
+		 8 1/2 x 14 SEF 0x160b 0x0af0 0x06a4 2800 1700 14 8,5 355,6 215,9 
+	 
+	 
+		 8 1/2 x 11 SEF 0x160f 0x0898 0x06a4 2200 1700 11 8,5 279,4 215,9 
+	 
+	 
+		 8 1/2 x 11 LEF 0x060f 0x06a4 0x0898 1700 2200 8,5 11 215,9 279,4 
+	 
+	 
+		 5 1/2 x 8 1/2 SEF 0x1618 0x06a4 0x044c 1700 1100 8,5 5,5 215,9 139,7 
+	 
+	 
+		 5 1/2 x 8 1/2 LEF 0x0618 0x044c 0x06a4 1100 1700 5,5 8,5 139,7 215,9 
+	 
+	 
+		 7 1/4 x 10 1/2 SEF 0x1617 0x0834 0x05aa 2100 1450 10,5 7,25 266,7 184,2 
+	 
+	 
+		 7 1/4 x 10 1/2 LEF 0x0617 0x05aa 0x0834 1450 2100 7,25 10,5 184,2 266,7 
+	 
+	 
+		 9 x 13cm SEF 0x1e63 0x03ff 0x02c4 1023 708 5,115 3,54 129,9 89,9 
+	 
+	 
+		 9 x 13cm LEF 0x0e63 0x02c4 0x03ff 708 1023 3,54 5,115 89,9 129,9 
+	 
+	 
+		 10 x 15cm SEF 0x1e62 0x04d9 0x0313 1241 787 6,205 3,935 157,6 99,9 
+	 
+	 
+		 10 x 15cm LEF 0x0e62 0x0313 0x04d9 787 1241 3,935 6,205 99,9 157,6 
+	 
+	 
+		 13 x 18cm SEF 0x1e61 0x0589 0x03ff 1417 1023 7,085 5,115 180,0 129,9 
+	 
+	 
+		 13 x 18cm LEF 0x0e61 0x03ff 0x0589 1023 1417 5,115 7,085 129,9 180,0 
+	 
+	 
+		 Foolscap SEF 0x1614 0x0a28 0x0640 2600 1600 13 8 330,2 203,2 
+	 
+	 
+		 8K SEF 0x1803 0x0bfe 0x084d 3070 2125 15,35 10,625 389,9 269,9 
+	 
+	 
+		 16K LEF 0x0804 0x05ff 0x084d 1535 2125 7,675 10,625 194,9 269,9 
+	 
+	 
+		 16K SEF 0x1804 0x084d 0x05ff 2125 1535 10,625 7,675 269,9 194,9 
+	 
+ 
+
+ 
+Custom formats use the smallest size that encloses the custom format. e.g. 33x21mm and 85x99mm both use A6 SEF (0x1106 = 06 11 )
+ 
+ 
+	 
+	 
+		 bytes 21-22 Image format 
+	 
+	 
+	 
+		 0x0000 (00 00) Text 
+	 
+	 
+		 0x0001 (01 00) Printed Photograph 
+	 
+	 
+		 0x0002 (02 00) Text &amp; Printed Photograph 
+	 
+	 
+		 0x0003 (03 00) Low contrast Original 
+	 
+	 
+		 0x0004 (04 00) Map 
+	 
+	 
+		 0x0005 (05 00) Photo Paper 
+	 
+	 
+		 0x0006 (06 00) Text &amp; Photo Paper ( default ) 
+	 
+	 
+		 0x0007 (07 00) Copied Paper 
+	 
+ 
+
+ 
+
+ Esc*w0W ... Wait for button 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*w0W 
+	 
+	 
+	 
+		     0W Parameter W: function „Wait for button“ 
+	 
+	 
+		 Return data: ESC*s20101r$V 
+	 
+	 
+		     20101r Variable 20101 indicates whether Start button was pressed 
+	 
+	 
+		     $V Parameter V: success status, 1=Start pressed, 0=Failure 
+	 
+ 
+
+ 
+The scanner sends empty responses (every ~9 seconds), until a button is pressed (and a proper response is sent).
+ 
+
+ 
+Example:
+ 
+ 02 00 00 00 11 00 00 00 01 00 00 00 1b 2a 77 30 57 ESC*w0W
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 0c 00 00 00 02 00 00 80
+ 02 00 00 00 0c 00 00 00 02 00 00 80
+ 02 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 30 31 30 31 72 31 56 ESC*s20101 r1V 
+
+ 
+
+ ESC*f0S ... Scan Window 
+ 
+
+ 
+Starts the scan of the window (window position and extent as set by previous SCL calls, or whole FBF).
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*f0S 
+	 
+	 
+	 
+		     0S Parameter S: Start scan 
+	 
+	 
+		 Return data: ESC*s20113r1V 
+	 
+	 
+		     20116r Variable 20113: See below 
+	 
+	 
+		     1V Return value: 1..success, 0..failure 
+	 
+ 
+
+ 
+A sample scan operation, including all headers looks like:
+ 
+ 02 00 00 00 11 00 00 00 01 00 00 00 1b 2a 66 30 53 ESC*f0S
+ 02 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 02 00 00 00 17 00 00 00 01 00 00 80 2a 73 32 30 31 31 33 72 31 56 ESC*s20113 r1V 
+
+ 
+
+ Esc*w0S ... Read scan data 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*w0S 
+	 
+	 
+	 
+		     0S Parameter S: function „Read scan data“ 
+	 
+	 
+		 Return data: binary data, format see below 
+	 
+ 
+
+ 
+Argument of the subsequent request calls (with 02 in the packet header): maximum buffer size.
+ 
+
+ 
+Multiple request calls (with 02 in the packet header) might have to be used to fetch all scan data. The end of the data is indicated by a response with packet type 04 and data 00 00 00 00 . 
+ 
+
+ 
+Example:
+ 
+ 02 00 00 00 11 00 00 00 01 00 00 00 1b 2a 77 30 53 ESC*w0S
+ 02 00 00 00 10 00 00 00 02 00 00 00 a0 fa 0f 00
+ 02 00 00 00 ac fa 0f 00 01 00 00 80
+ ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ [...]
+ fe ff ff ff ff ff ff ff
+ 02 00 00 00 10 00 00 00 02 00 00 00 58 ed 0f 00
+ 02 00 00 00 64 ed 0f 00 01 00 00 80
+ ff ff ff ff ff ff ff ff ff ff ff ff ff ff f9 f9
+ [...]
+ f9 f9 f9 f9 f8 f7 f9 f9 f6 fa fa fa f7 f7 fa fa
+ fd ff ff ff ff ff ff ff
+ [...]
+ 02 00 00 00 10 00 00 00 02 00 00 00 58 ed 0f 00
+ 02 00 00 00 10 00 00 00 04 00 00 80 00 00 00 00 
+
+ 
+
+ Esc*h$B ... Select &amp; Lock Box; Unlock Box 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*h$B 
+	 
+	 
+	 
+		     $B Parameter B: &gt;0: Lock box $; 0=unlock box 
+	 
+	 
+		 Return data: ESC*s21100r$V 
+	 
+	 
+		     21100r Variable 21100 indicates success value of function 
+	 
+	 
+		     $V Parameter V: success status, 1=OK, 0=Failure 
+	 
+ 
+
+ 
+Example:
+ 
+ 01 00 00 00 11 00 00 00 01 00 00 00 1b 2a 68 31 42 ESC*h1B
+ 01 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 01 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 31 31 30 30 72 31 56 ESC*s21100r1V 
+
+ 
+
+ Esc*h$$F ... TODO: Unknown 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*h$$F 
+	 
+	 
+	 
+		     $$F Parameter F: TODO 
+	 
+	 
+		 Return data: ESC*s21100r$V 
+	 
+	 
+		     21104r Variable 21104 indicates success value of function 
+	 
+	 
+		     $V Parameter V: success status, 1=OK, 0=Failure 
+	 
+ 
+
+ 
+Example:
+ 
+ 01 00 00 00 12 00 00 00 01 00 00 00 1b 2a 68 36 34 46 ESC*h64F
+ 01 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 01 00 00 00 17 00 00 00 01 00 00 80
+ 1b 2a 73 32 31 31 30 34 72 31 56 ESC*s21104 r1V 
+
+ 
+
+ Esc*h$$K[...] ... Download Preview Image 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*h$$K [12 bytes binary data] 
+	 
+	 
+	 
+		     $$K Parameter K: #bytes for preview image specs, always 12K 
+	 
+	 
+		     12 bytes of binary data 
+	 
+	 
+		     Bytes 1-2: Image Number (Index) 
+	 
+	 
+		     Bytes 3-4: : Unknown ( 00 00 ) 
+	 
+	 
+		     Bytes 5-6: : Unknown ( 01 00 ), color mode? 
+	 
+	 
+		     Bytes 7-8: : Unknown ( 78 00 ), preview image height? 
+	 
+	 
+		     Bytes 9-10: : Unknown ( 54 00 ), preview image width? 
+	 
+	 
+		     Bytes 11-12: : Unknown ( 00 00 ) 
+	 
+	 
+		 Return data: ESC*s21111t$$V[binary data] 
+	 
+	 
+		     21111t Variable 21111 returns size of binary data 
+	 
+	 
+		     $$W Parameter W: Length of binary data 
+	 
+	 
+		     [data] Binary data of length as given in the W parameter 
+	 
+ 
+
+ 
+Example:
+ 
+ 01 00 00 00 1e 00 00 00 01 00 00 00 
+ 1b 2a 68 31 32 4b 01 00 00 00 01 00 78 00 54 00 00 00 ESC*h12K
+ 01 00 00 00 10 00 00 00 02 00 00 00 00 00 10 00 
+ 01 00 00 00 d7 09 00 00 01 00 00 80
+ 1b 2a 73 32 31 31 31 31 74 32 34 39 33 57 ff d8 ESC*s21111t2493W[Img data]
+ ff e0 00 10 4a 46 49 46 00 01 01 00 00 64 00 64
+ 00 00 ff db 00 43 00 03 02 02 03 02 02 03 03 03
+ [...] 
+
+ 
+
+ Esc*h$$L[...] ... FIXME: Select image in Box, select settings 
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*h$$L [25 bytes binary data] 
+	 
+	 
+	 
+		     $$L Parameter L: #bytes image settings, always 25L 
+	 
+	 
+		     25 bytes of binary data 
+	 
+	 
+		     Bytes 1-2: : Unknown ( 01 00 ) 
+	 
+	 
+		     Bytes 3-4: : Unknown ( 01 00 ) 
+	 
+	 
+		     Bytes 5-6: : Unknown ( 00 00 ) 
+	 
+	 
+		     Bytes 7-7: : Unknown ( 01 00 ) 
+	 
+	 
+		     Bytes 9-10: : Unknown ( 01 00 ) 
+	 
+	 
+		     Bytes 11-12: : Unknown ( 81 00 ) 
+	 
+	 
+		     Bytes 13-14: : Unknown ( c8 00 ) 
+	 
+	 
+		     Bytes 15-16: : Unknown ( 00 00 ) 
+	 
+	 
+		     Bytes 17-18: : Unknown ( 64 00 ) 
+	 
+	 
+		     Bytes 19-20: : Unknown ( 00 00 ) 
+	 
+	 
+		     Bytes 21-22: : Unknown ( 01 00 ) 
+	 
+	 
+		     Bytes 23-24: : Unknown ( 00 00 ) 
+	 
+	 
+		     Byte 25: : Unknown ( 00 ) 
+	 
+	 
+		 Return data: ESC*s21116r$$$V[binary data] 
+	 
+	 
+		     21116r Variable 21116 returns size of image data 
+	 
+	 
+		     $$$V Parameter V: Size of binary image data to be requested 
+	 
+ 
+
+ 
+Example:
+ 
+ 01 00 00 00 2b 00 00 00 01 00 00 00
+ 1b 2a 68 32 35 4c 01 00 01 00 00 00 01 00 01 00 ESC*h25L
+ 81 00 c8 00 00 00 64 00 00 00 01 00 00 00 00 01
+ 00 00 00 10 00 00 00 02 00 00 00 00 01 00 00
+ 01 00 00 00 1c 00 00 00 01 00 00 80
+ 1b 2a 73 32 31 31 31 36 72 33 39 34 33 31 30 56 ESC*s21116 r394310V 
+
+ 
+
+ ESC*oE ... Clear errors 
+ 
+
+ 
+Clear the error state on the scanner (error stack, error number, etc.) / reset the device.
+ 
+ 
+	 
+	 
+		 Escape sequence: ESC*oE 
+	 
+	 
+	 
+		     E Parameter E: no value 
+	 
+	 
+		 Return data: NONE 
+	 
+ 
+
+ 
+Example, clearing up / resetting the device after an error:
+ 
+ 02 00 00 00 10 00 00 00 01 00 00 00 1b 2a 6f 45 .*oE 
+
+ 
+
+ Known SCL scanner parameters 
+ 
+ 
+	 
+	 
+		 Var. Description Data type Range / values comments 
+	 
+	 
+		 Request functions 
+	 
+	 
+	 
+		 25 ADF loaded bool 0=NO, 1=YES 
+	 
+	 
+		 257 Current error stack size int 0 or 1 (for ERROR) 
+	 
+	 
+		 258 Scanner capabilities (C353 series) binary 30 bytes see below 
+	 
+	 
+		 259 Current Error Code int return value: &gt;0 for ERROR ( see below ); ESC8s259dN (empty) for no error 
+	 
+	 
+		 261 128-bit encryption key binary 16 bytes encryption key for password encryption 
+	 
+	 
+		 264 SNMP Device identification binary 129 bytes first 42 byte: SNMP sysObjectID OID, then name, then MAC, see below 
+	 
+	 
+		 265 Image extent binary 8 bytes see below 
+	 
+	 
+		 270 hardware capabilities? (C353 series) binary 11 bytes Unknown, 
+	 
+	 
+		 273 Scanner capabilities (423 series) binary 36 bytes format: see below 
+	 
+	 
+		 274 List of data boxes on the scanner binary 378 bytes format: ESC*274t378:1/1W[…data(name, creation date)…] 
+	 
+	 
+		 275 binary 0 bytes Unknown, called after list of data boxes, format: ESC*275t0:0/0W 
+	 
+	 
+		 277 List of images in selected box binary ?? bytes list images, format see below , format: ESC*277t762:2/2W[…] 
+	 
+	 
+		 280 hardware capabilities? (423 series) binary 12 bytes Unknown, requested during open; , 01 00 00 00 00 02 01 00 00 00 00 00 
+	 
+	 
+		 Function success/failure return values 
+	 
+	 
+		 20100 Lock/Unlock success bool 1=success, 0=failure Returned to ESC*w$J commands 
+	 
+	 
+		 20101 Wait for button success bool 1=Btn pressed, 0=cancel Returned to ESC*w0W commands 
+	 
+	 
+		 20112 Open scanner success bool 1=connection established, 0=failure Returned to ESC E welcome command 
+	 
+	 
+		 20113 Start scan success bool 1=scan successfully started, 0=failure Returned to ESC*f0S command 
+	 
+	 
+		 20116 Set scan settings success (on C202) bool 1=success, 0=failure Returned to Esc*z24G command on bizhub C202 
+	 
+	 
+		 20119 Login/logout success bool 1=success, 0=failure Returned to Esc*w$$U[…] login command 
+	 
+	 
+		 20122 Set scan settings success (on 363) bool 1=success, 0=failure Returned to Esc*z27H command on bizhub 363 
+	 
+	 
+		 21110 Select/lock box success bool 1=success, 0=failure Returned to Esc*h$B box select command 
+	 
+	 
+		 21104 : Unknown bool 1=success, 0=failure Returned to Esc*h$F command 
+	 
+	 
+		 21111 Retrieve Preview Image binary variable length Returned to Esc*h12K preview image command; format: ESC*s21111t2493W[….] 
+	 
+	 
+		 21116 Image data size integer size of scanned image in bytes Returned to Esc*h25L image settings command; format: ESC*s21116r394310V 
+	 
+	 
+		 Request functions 
+	 
+	 
+		 20005 int Unknown, ; =8 
+	 
+	 
+		 20008 int Unknown, ; =0 
+	 
+	 
+		 20201 ADF still loaded int 1=loaded,0=unloaded Requested during duplex ADF between pages 
+	 
+	 
+		 21004 int Requested during open; Unknown, ; =3 
+	 
+	 
+		 21005 int Requested during open; Unknown, ; =4 oder =1 
+	 
+	 
+		 21027 int Requested during HDD open; Unknown, ; =1 
+	 
+ 
+
+ 
+
+ Error codes (returned to 259 requests) 
+ 
+ 
+	 
+	 
+		 Value Error 
+	 
+	 
+	 
+		 1024 Paper misfeed 
+	 
+	 
+		 10001 : Unknown 
+	 
+	 
+		 10005 Authentication error (wrong user/password) 
+	 
+	 
+		 10501 : Unknown 
+	 
+	 
+		 10503 Device busy 
+	 
+	 
+		 12003 ADF error (wrong paper format, paper jam, ) 
+	 
+ 
+
+ 
+
+ Structures of binary parameters 
+ 
+
+ 
+
+ 258 ... Scanner capabilities 
+ 
+ 
+	 
+	 
+		 30 byte length 
+	 
+	 
+	 
+		 byte 1-2 Unknown always 01 00 
+	 
+	 
+		 byte 3-4 Maximum x-resolution (little endian, 600dpi=0x0258) 
+	 
+	 
+		 byte 5-6 Minimum x-resolution (little endian, 200dpi=0x00c8) 
+	 
+	 
+		 byte 7-8 Maximum y-resolution (little endian, 600dpi=0x0258) 
+	 
+	 
+		 byte 9-10 Minimum y-resolution (little endian, 200dpi=0x00c8) 
+	 
+	 
+		 byte 11-12 Unknown 01 00 
+	 
+	 
+		 byte 13-14 Unknown 01 00 
+	 
+	 
+		 byte 15-16 Unknown 07 00 
+	 
+	 
+		 byte 17-18 Maximum background removal 0x0002= 2 
+	 
+	 
+		 byte 19-20 Minimum background removal 0xfffa=-6 
+	 
+	 
+		 byte 21-22 Unknown 01 00 
+	 
+	 
+		 byte 23-24 Unknown 01 00 
+	 
+	 
+		 byte 25-26 Unknown ff 00 
+	 
+	 
+		 byte 27-28 Unknown 01 00 ( 03 00 on 423series) 
+	 
+	 
+		 byte 29-30 Unknown 01 00 
+	 
+ 
+
+ 
+
+ 273 ... Scanner capabilities 
+ 
+ 
+	 
+	 
+		 36 byte length 
+	 
+	 
+	 
+		 byte 1-2 Maximum x-resolution (little endian, 600dpi=0x0258) 
+	 
+	 
+		 byte 3-4 Minimum x-resolution (little endian, 200dpi=0x00c8) 
+	 
+	 
+		 byte 5-6 Maximum y-resolution (little endian, 600dpi=0x0258) 
+	 
+	 
+		 byte 7-8 Minimum y-resolution (little endian, 200dpi=0x00c8) 
+	 
+	 
+		 byte 9-10 Unknown 01 00 
+	 
+	 
+		 byte 11-12 Unknown 01 00 
+	 
+	 
+		 byte 13-14 Unknown 07 00 
+	 
+	 
+		 byte 15-16 Maximum background removal 0x0002= 2 
+	 
+	 
+		 byte 17-18 Minimum background removal 0xfffa=-6 
+	 
+	 
+		 byte 19-20 Unknown 01 00 
+	 
+	 
+		 byte 21-22 Unknown 01 00 
+	 
+	 
+		 byte 23-24 Unknown ff 00 
+	 
+	 
+		 byte 25-26 Unknown 03 00 (423series) 
+	 
+	 
+		 byte 27-28 Unknown 01 00 
+	 
+	 
+		 byte 29-30 Maximum paper discoloration 02 00 = 2 
+	 
+	 
+		 byte 31-32 Minimum paper discoloration fa ff =-6 
+	 
+	 
+		 byte 33-34 Unknown 01 00 
+	 
+	 
+		 byte 35-36 Unknown 01 00 
+	 
+ 
+
+ 
+
+ 264 ... SNMP identification 
+ 
+ 
+	 
+	 
+		 129 byte length 
+	 
+	 
+	 
+		 byte 1-34? SNMPv2-MIB::sysObjectID 1.3.5.1.4.1.18334.1.1.1.2.1.31.3.2 
+	 
+	 
+		 byte 43-? SNMPv2-MIB::sysDescr 
+	 
+	 
+		 byte 124-129 IF-MIB::ifPhysAddress (MAC address) 
+	 
+ 
+
+ 
+
+ 265 ... Image settings 
+ 
+ 
+	 
+	 
+		 8 byte length 
+	 
+	 
+	 
+		 byte 1-2 Pixels per line 
+	 
+	 
+		 byte 3-4 Bytes per line 
+	 
+	 
+		 byte 5-6 Number of lines 
+	 
+	 
+		 byte 7-8 Unknown, Always 00 00 
+	 
+ 
+
+ 
+
+ 270 ... Scanner installed hardware? FIXME 
+ 
+
+ 
+Unknown, 
+ 
+
+ 
+Possible Entries:
+ 
+ 
+ Protocol version 
+ 
+ Authentication needed 
+ 
+ public access allowed 
+ 
+ ADF installed 
+ 
+ ADF duplex 
+ 
+ Color or only B/W 
+ 
+ Compression available 
+ 
+ HDD installed (i.e. scan to/from box) 
+ 
+ 
+ 
+	 
+	 
+		 11 byte length C353 423 
+	 
+	 
+	 
+		 byte 1 Unknown 00 01 
+	 
+	 
+		 byte 2 Unknown 00 00 
+	 
+	 
+		 byte 3 Unknown 00 00 
+	 
+	 
+		 byte 4 Unknown 00 00 
+	 
+	 
+		 byte 5 Unknown 00 04 
+	 
+	 
+		 byte 6 Unknown 02 02 
+	 
+	 
+		 byte 7 Unknown 01 01 
+	 
+	 
+		 byte 8 Unknown 00 00 
+	 
+	 
+		 byte 9 Unknown 00 00 
+	 
+	 
+		 byte 10 Unknown 00 00 
+	 
+	 
+		 byte 11 Unknown 00 00 
+	 
+ 
+
+ 
+
+ All device parameters, to which the 363 answers 
+ 
+
+ 
+The BINARY parameter names appear to be a tree. The device starts from the beginning and as soon as a known parameter is found, it is returned, even if the requested parameter is longer. E.g. a request for parameter 25800 (and anything starting with 258) will return the parameter 258, since that is known.
+ 
+ 
+	 
+	 
+		 Param Type Description Comments / returned value 
+	 
+	 
+	 
+		 24 int ADF present *s24d1V 
+	 
+	 
+		 25 int ADF loaded *s25d0V 
+	 
+	 
+		 257 int error stack size 
+	 
+	 
+		 258 bin (30) capabilities 
+	 
+	 
+		 259 int current error *s259dN or *s259d0V for no error 
+	 
+	 
+		 261 bin (16) one-time random encryption key (128 bit) 
+	 
+	 
+		 264 bin (129) SNMP identification 
+	 
+	 
+		 265 bin (8) Image extent 
+	 
+	 
+		 267 bin (?) ? 
+	 
+	 
+		 269 bin (?) ? 
+	 
+	 
+		 270 bin (11) Installed hardware (like 280) 01 00 00 00 04 02 01 00 00 00 00 
+	 
+	 
+		 271 bin (70) ? all 00 
+	 
+	 
+		 272 bin (226) ? all 00 
+	 
+	 
+		 273 bin (36) capabilities 423 series 
+	 
+	 
+		 274 bin (?) List of public boxes for HDD TWAIN 
+	 
+	 
+		 275 bin (?) : List of user boxes for HDD TWAIN 
+	 
+	 
+		 276 bin (?) ? 
+	 
+	 
+		 277 bin (?) List of images in selected box (HDD TWAIN) 
+	 
+	 
+		 280 bin (12) Installed hardware (like 270) bit 5 00 or 04 , additional 00 
+	 
+	 
+		 301 bin (32) ? 01 04 11 01 00 00 00 64 02 03 11 01 00 00 00 64 14 04 01 01 00 00 00 64 15 04 01 01 00 00 00 00 
+	 
+	 
+		 307 bin (?) ? *s307t0:0/0W 
+	 
+	 
+		 308 bin (?) ? *s308t41910:66/66W……PRINT………[…] 
+	 
+	 
+		 309 bin (36) ? e8 03 40 0d 03 00 c8 00 00 00 10 27 00 00 10 27 00 00 b8 0b 00 00 0a 00 01 00 14 00 64 00 05 00 01 00 c8 00 
+	 
+	 
+		 310 bin (?) ? 
+	 
+	 
+		 311 bin (?) ? 
+	 
+	 
+		 312 bin (4) ? 01 01 01 01 
+	 
+	 
+		 314 bin (2) ? 02 00 
+	 
+	 
+		 401 bin (?) ? 
+	 
+	 
+		 402 bin (?) ? 
+	 
+	 
+		 403 bin (?) ? 
+	 
+	 
+		 1024 int ? dN 
+	 
+	 
+		 1025 int ? dN 
+	 
+	 
+		 1026 int ? dN 
+	 
+	 
+		 20001 int ? d0V 
+	 
+	 
+		 20002 int ? d1V 
+	 
+	 
+		 20003 int ? d4V 
+	 
+	 
+		 20004 int ? d0V 
+	 
+	 
+		 20005 int ? dN 
+	 
+	 
+		 20006 int ? d1V 
+	 
+	 
+		 20007 int ? d0V 
+	 
+	 
+		 20008 int ? dN 
+	 
+	 
+		 20009 int ? d0V 
+	 
+	 
+		 20200 int ? d0V 
+	 
+	 
+		 20201 int ? d0V 
+	 
+	 
+		 21000 int ? dN 
+	 
+	 
+		 21003 int ? dN 
+	 
+	 
+		 21004 int ? d3V 
+	 
+	 
+		 21005 int ? d4V 
+	 
+	 
+		 21006 int ? dN 
+	 
+	 
+		 21024 int ? dN 
+	 
+	 
+		 21025 int ? dN 
+	 
+	 
+		 21026 int ? dN 
+	 
+	 
+		 21027 int ? d1V 
+	 
+	 
+		 30010 int ? d110036:210036V 
+	 
+	 
+		 30020 int ? d0V 
+	 
+	 
+		 30030 int ? d1V 
+	 
+	 
+		 30031 int ? d1V 
+	 
+ 
+
+ 
+Parameters that are aliases / return a different parameter than requested:
+ 
+ 
+	 
+	 
+		 Param Type alias 
+	 
+	 
+	 
+		 8 bin ⇒ 272 
+	 
+	 
+		 32 bin ⇒ 272 
+	 
+	 
+		 36 bin ⇒ 312 
+	 
+	 
+		 45 bin ⇒ 402 
+	 
+	 
+		 279 bin ⇒ 267 
+	 
+	 
+		 258* bin ⇒ 258 
+	 
+	 
+		 261* bin ⇒ 261 
+	 
+	 
+		 265* bin ⇒ 265 
+	 
+	 
+		 267* bin ⇒ 267 
+	 
+	 
+		 269* bin ⇒ 269 
+	 
+	 
+		 278* bin ⇒ 267 
+	 
+	 
+		 etc… 
+	 
+	 
+		 19839 int ⇒ 20008 
+	 
+ 
+
+ 
+
+ Sequence of commands of a typical communication (Pseudo-code) 
+ 
+
+ 
+&#039;⇒&#039; indicates data/command sent to scanner, &#039;⇐&#039; indicated data returned by the scanner (request data packet omitted here!):
+ 
+
+ 
+
+ Connecting to the device 
+ 
+ ⇒ EscE Reset/Init device
+⇐ Esc*s20112r1V Success
+⇒ Esc*s21004E Request variable 21004
+⇐ Esc*s21004d3V Variable 21004 has value 3
+⇒ Esc*s21005E Request variable 21005
+⇐ Esc*s21005d1V Variable 21005 has value 1
+⇒ Esc*s264U Request binary data of variable 264 (device identification)
+⇐ Esc*s264t129W1.3.6.1.4.[....] 129 bytes of SNMP device id. (sysObjectID, sysDescr, ifPhysAddress) 
+
+ 
+C353series:
+ 
+ ⇒ Esc*s270U Request binary data of variable 270 (C353series)
+⇐ Esc*s270t11W[.....] 11 bytes of binary data in variable 270 
+
+ 
+423series:
+ 
+ ⇒ Esc*s280U Request binary data of variable 280 (423series)
+⇐ Esc*s280t12W[.....] 12 bytes of binary data in variable 280 
+
+ 
+
+ Opening the device 
+ 
+ [OPTIONAL: If login desired/required (see 270/280 variable):
+ ⇒ Esc*s261U Request encryption key
+ ⇐ Esc*s261t16W[...] 16 bytes (128-bit) encryption key
+ ⇒ Esc*w100U[public...] Sending login data
+ ⇐ Esc*s20119r1V Login successful
+] 
+
+ 
+C353series:
+ 
+ ⇒ Esc*s258U Request binary data of variable 258 (scanner capabilities)
+⇐ Esc*s258t30W[.....] 30 bytes of binary scanner capabilities data in variable 258 
+
+ 
+423series:
+ 
+ ⇒ Esc*s20005E Request variable 20005
+⇐ Esc*s20005d8V Variable 20005 has value 8
+⇒ Esc*s20008E Request variable 20008
+⇐ Esc*s20008d0V Variable 20008 has value 0
+⇒ Esc*s273U Request binary data of variable 273 (scanner capabilities)
+⇐ Esc*s273t36W[.....] 36 bytes of binary scanner capabilities data in variable 273 
+
+ 
+
+ Scanning operation 
+ 
+ ⇒ Esc*w0J Lock scanner
+⇐ Esc*s20100r1V Success
+⇒ Esc*s25E Request variable 25 (ADF loaded)
+⇐ Esc*s25d1V Variable 25 has value 1 (ADF is loaded) 
+
+ 
+C353series:
+ 
+ ⇒ Esc*z24G[...] Set image parameters (24 bytes of binary data sent)
+⇐ Esc*s20116r1V Success 
+
+ 
+423series:
+ 
+ ⇒ Esc*z27H[...] Set image parameters (27 bytes of binary data sent)
+⇐ Esc*s20122r1V Success 
+
+ 
+all series:
+ 
+ [OPTIONAL:
+ ⇒ Esc*w0W Wait for button
+ ⇐ - Empty packet, indicating still waiting for button
+ ⇐ - Empty packet, indicating still waiting for button
+ ⇐ Esc*s20101r1V Button pressed → start scan now allowed
+]
+⇒ Esc*f0S Start scan
+⇐ Esc*s20113r1V Success
+⇒ Esc*s265U Request binary data of variable 265 (image extent)
+⇐ Esc*s265t8W[...] 8 bytes of image extent information in variable 265
+⇒ Esc*w0S Request image data
+⇐ [binary data] Image data returned by scanner
+⇐ &#039;00 00 00 00&#039; Empty packet with type &#039;no data available&#039; indicates end of scan data
+[OPTIONAL: for scan from ADF
+ ⇒ Esc*s20201E Request variable 25 (ADF state / more pages available)
+ ⇐ Esc*s20201d1V ADF still loaded / more pages available (d0V would be unloaded)
+ [if d1V: 
+ REPEAT from Esc*s265U above
+ ]
+] 
+
+ 
+
+ Closing the session / device 
+ 
+ ⇒ Esc*w1J Unlock scanner
+⇐ Esc*s20100r1V Success
+⇒ Esc*w-1U Logout
+⇐ Esc*s20119r1V Success 
+
+ 
+
+ Error handling 
+ 
+ ⇒ Esc*w1J Unlock device (e.g. after not enough data could be read)
+⇐ Esc*s20100r0V r0V indicating FAILURE of a function
+⇒ Esc*s257E Request error status (variable 257)
+⇐ Esc*s257d1V Error available in queue
+⇒ Esc*s259E Request error code (variable 259)
+⇐ Esc*s259d10001V Last error code is 10001
+⇒ Esc*oE Reset / cleanup error 
+
+ 
+
+ Image format 
+ 
+ 
+ If JPEG compression is used, the complete JFIF data is sent as the return value of the Esc*w0S command. I.e. the data starts with the JFIF header ff d8 ff e0 00 10 4a 46 49 46 00 01 01 01 00 c8 (ffd8=Start of Image, ffe0=APP0 JFIF tag, 0010=10 bytes of JFIF tag including size, 4a 46 49 46=„JFIF“, 00 01 01 01) 
+ 
+ If raw data is used, 
+ 
+ 
+
+ 
+ 
+ 
+
+ 
+
+ 
+ 
+ 
+
+ hardware/bizhub_scan.txt · Zuletzt geändert: 2011/10/10 12:29 von reinhold 
+
+ 
+ 
+ 
+
+ 
+ 
+ Seiten-Werkzeuge 
+ 
+ 
+ Ältere Versionen Links hierher Alles aus-/einklappen Nach oben 
+ 
+ 
+ 
+
+ 
+ 
+ 
+ 
+ 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-donate.gif" width="80" height="15" alt="Donate" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-php.gif" width="80" height="15" alt="Powered by PHP" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-html5.png" width="80" height="15" alt="Valid HTML5" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-css.png" width="80" height="15" alt="Valid CSS" /> 
+ <img
+ src="/lib/tpl/dokuwiki/images/button-dw.png" width="80" height="15"
+ alt="Driven by DokuWiki" /> 
+ 
+
+ 
+ 
+
+ 
+ 
+ 

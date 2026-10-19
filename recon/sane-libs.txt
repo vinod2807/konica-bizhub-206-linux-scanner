@@ -1,0 +1,14 @@
+libsane-airscan.so
+libsane-airscan.so.1
+libsane-dll.so
+libsane-dll.so.1
+libsane-dll.so.1.4.0
+libsane-epson2.so
+libsane-epson2.so.1
+libsane-epson2.so.1.4.0
+libsane-epsonds.so
+libsane-epsonds.so.1
+libsane-epsonds.so.1.4.0
+libsane-lexmark_x2600.so
+libsane-lexmark_x2600.so.1
+libsane-lexmark_x2600.so.1.4.0

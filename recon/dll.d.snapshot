@@ -1,0 +1,4 @@
+# sane-dll entry for sane-airscan
+##airscan disabled: L3260 eSCL returns 404
+##epson2 disabled: L3260 needs epsonds
+epsonds
