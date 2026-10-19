@@ -415,7 +415,8 @@ while the flatbed page needed `--rotate 90`.
 After the ADF scan the status still read `ff 01 …`, even 3 seconds later.
 That may be a latched paper sensor or a page left in the feeder; do not use
 byte 1 alone as an "ADF empty" check until this is understood. A second ADF
-page was not tested.
+page was not tested. Status queries still worked after the scan, so the ADF
+path does not wedge the USB session and needs no power-cycle.
 
 Artifacts:
 
