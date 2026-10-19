@@ -414,11 +414,11 @@ geometry and 1,795,584-byte image as the flatbed. The ADF image is rotated
 the other way from the flatbed test: `--rotate 270` produced upright text,
 while the flatbed page needed `--rotate 90`.
 
-After the ADF scan the status still read `ff 01 …`, even 3 seconds later.
-That may be a latched paper sensor or a page left in the feeder; do not use
-byte 1 alone as an "ADF empty" check until this is understood. A second ADF
-page was not tested. Status queries still worked after the scan, so the ADF
-path does not wedge the USB session and needs no power-cycle.
+Immediately after the ADF scan the status still read `ff 01 …`, but by the
+time of the SANE tests it had cleared to `ff 00 …`; byte 1 is the ADF
+paper-present bit. The SANE backend uses it to return `SANE_STATUS_NO_DOCS`
+when the feeder is empty. Status queries still worked after the scan, so
+the ADF path does not wedge the USB session and needs no power-cycle.
 
 Artifacts:
 
