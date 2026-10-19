@@ -471,6 +471,46 @@ Verified:
 The backend scans one page per `sane_start()`; multi-page ADF looping is
 not implemented yet.
 
+### NAPS2 (Flatpak)
+
+NAPS2 is installed as the flatpak `com.naps2.Naps2` (8.5.1).  It bundles
+its own glibc SANE stack (`/app/lib/libsane.so.1.4.0` and backends under
+`/app/lib/sane`), so it cannot `dlopen` the host's musl
+`libsane-ar206.so` — two different libc worlds.  Rather than cross-build a
+glibc backend, the host backend is served over the SANE network protocol:
+
+```
+NAPS2 -> bundled libsane -> net backend -> localhost:6566
+      -> saned (host) -> ar206 backend -> libusb -> USB 206
+```
+
+Setup (`tools/setup-naps2.sh`):
+
+* `apk add sane-saned sane-backend-net`.
+* `adduser saned lp` — the USB node `/dev/bus/usb/001/006` is `root:lp`
+  (owned by `usblp`), and `saned` runs unprivileged.
+* Append `localhost` / `127.0.0.1` to `/etc/sane.d/saned.conf` (no other
+  clients allowed).
+* `rc-update add saned default` + `rc-service saned start`.
+* Copy NAPS2's bundled `sane.d` into
+  `~/.var/app/com.naps2.Naps2/config/sane`, uncomment `localhost` in
+  `net.conf`, and point the app at it with
+  `flatpak override --user --env=SANE_CONFIG_DIR=…`.
+
+Verified (on an isolated Xvfb display so the live JWM session was not
+disturbed):
+
+* NAPS2's own bundled `scanimage` lists
+  `net:localhost:ar206:ar206:usb:132b:232b`.
+* **Profile Settings -> Choose device** lists **bizhub 206 (net)** among
+  four devices (Epson via escl/epson2/airscan plus the 206).
+* A profile `Konica bizhub 206` (device `net:localhost:ar206:…`,
+  Grayscale, 300 dpi, A4, Glass) was saved, and **Scan** pulled a full
+  page into the NAPS2 window.
+
+The Epson profile remains the default; the host `ar206`, `epsonds` and
+print paths are unaffected.  saned only claims interface 0 during a scan.
+
 ### Remaining
 
 * ADF multi-page: the current tool scans one page per invocation. The

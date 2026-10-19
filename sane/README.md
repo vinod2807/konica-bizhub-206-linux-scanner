@@ -43,6 +43,35 @@ scanimage -d ar206:ar206:usb:132b:232b \
 
 Simple Scan lists the device as **KONICA MINOLTA bizhub 206**.
 
+## NAPS2 (Flatpak)
+
+The NAPS2 flatpak bundles its own glibc SANE stack
+(`/app/lib/libsane.so.1.4.0` plus backends under `/app/lib/sane`), so it
+cannot load the host's musl `libsane-ar206.so` directly.  Instead the
+host backend is served over the SANE network protocol:
+
+```
+NAPS2 -> bundled libsane -> net backend -> localhost:6566
+      -> saned (host) -> ar206 backend -> libusb -> USB 206
+```
+
+Run `tools/setup-naps2.sh` to configure this.  It:
+
+* installs `sane-saned` and `sane-backend-net`;
+* adds the `saned` user to the `lp` group (the USB node is `root:lp`);
+* allows only `localhost`/`127.0.0.1` in `/etc/sane.d/saned.conf`;
+* enables and starts the `saned` OpenRC service;
+* copies NAPS2's bundled `sane.d` to
+  `~/.var/app/com.naps2.Naps2/config/sane` and uncomments `localhost`
+  in its `net.conf`;
+* sets `SANE_CONFIG_DIR` for the app via
+  `flatpak override --user`.
+
+In NAPS2 the scanner appears in **Profile Settings -> Choose device** as
+**bizhub 206 (net)** (device id `net:localhost:ar206:ar206:usb:132b:232b`).
+Use `Grayscale` (or `Black and White`) and a 150/300/600 dpi resolution;
+the backend does not support 100 dpi or color.
+
 ## Options
 
 | Option | Values | Default |
