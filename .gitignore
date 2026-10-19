@@ -1,3 +1,6 @@
 vendor/
 captures/*.pcapng
 captures/*.pcap
+__pycache__/
+*.pyc
+probe/*.bin

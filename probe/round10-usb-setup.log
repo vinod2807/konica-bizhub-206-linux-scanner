@@ -1,0 +1,34 @@
+device: bus=1 addr=4 idVendor=0x132b idProduct=0x232b
+interface 0: class=0xff subclass=0xff protocol=0xff
+OUT 0x03 <= 64: 03 0c 0d 01 00 05 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  wrote 64
+OUT 0x03 <= 64: 03 0b 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+interface 0 released
+Traceback (most recent call last):
+  File "/home/vinod/konica-scanner-re/tools/usb_session.py", line 120, in <module>
+    main()
+    ~~~~^^
+  File "/home/vinod/konica-scanner-re/tools/usb_session.py", line 96, in main
+    written = dev.write(EP_OUT, payload, timeout=1000)
+  File "/usr/lib/python3.14/site-packages/usb/core.py", line 1003, in write
+    return fn(
+            self._ctx.handle,
+    ...<3 lines>...
+            self.__get_timeout(timeout)
+        )
+  File "/usr/lib/python3.14/site-packages/usb/backend/libusb1.py", line 841, in bulk_write
+    return self.__write(self.lib.libusb_bulk_transfer,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        dev_handle,
+                        ^^^^^^^^^^^
+    ...<2 lines>...
+                        data,
+                        ^^^^^
+                        timeout)
+                        ^^^^^^^^
+  File "/usr/lib/python3.14/site-packages/usb/backend/libusb1.py", line 942, in __write
+    _check(retval)
+    ~~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/site-packages/usb/backend/libusb1.py", line 602, in _check
+    raise USBTimeoutError(_strerror(ret), ret, _libusb_errno[ret])
+usb.core.USBTimeoutError: [Errno 110] Operation timed out

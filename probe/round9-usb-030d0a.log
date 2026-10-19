@@ -1,0 +1,8 @@
+device: bus=1 addr=4 idVendor=0x132b idProduct=0x232b
+interface 0: class=0xff subclass=0xff protocol=0xff
+OUT 0x03 <= 64 bytes: 03 0d 0a 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+wrote 64 bytes
+IN  0x84 => timeout after 3500 ms
+IN  0x85 => 10 bytes: ff 00 00 00 00 00 00 00 00 00
+INT 0x87 => timeout after 3500 ms
+interface 0 released
