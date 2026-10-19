@@ -1,20 +1,31 @@
 #!/bin/sh
 # Desktop wrapper for the Konica Minolta bizhub 206 USB scanner.
-# Usage: konica206-scan [rotation]     (rotation: 0, 90, 180, 270)
+# Usage: konica206-scan [flatbed|adf] [rotation]
+#   flatbed  A4, 300 dpi, default rotation 90
+#   adf      A4, 300 dpi, default rotation 270
 set -u
 
-ROTATE="${1:-90}"
+SOURCE="${1:-flatbed}"
+case "$SOURCE" in
+    flatbed) ROTATE="${2:-90}" ;;
+    adf)     ROTATE="${2:-270}" ;;
+    *)
+        echo "usage: $0 [flatbed|adf] [0|90|180|270]" >&2
+        exit 2
+        ;;
+esac
+
 DIR="${HOME}/Scans"
 mkdir -p "$DIR"
 STAMP="$(date +%Y%m%d-%H%M%S)"
-BASE="$DIR/konica206-$STAMP"
+BASE="$DIR/konica206-$SOURCE-$STAMP"
 TOOL="/home/vinod/konica-scanner-re/tools/ar206_scan.py"
 
-echo "Konica Minolta bizhub 206 - A4 mono, 300 dpi"
+echo "Konica Minolta bizhub 206 - A4 mono, 300 dpi, source: $SOURCE"
 echo "Output: $BASE.png / $BASE.pdf"
 echo
 
-if ! python3 "$TOOL" --paper a4 --dpi 300 --rotate "$ROTATE" \
+if ! python3 "$TOOL" --source "$SOURCE" --paper a4 --dpi 300 --rotate "$ROTATE" \
         --out "$BASE.png" --pdf "$BASE.pdf"; then
     echo
     echo "Scan failed."

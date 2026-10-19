@@ -387,9 +387,11 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
   `python3 tools/ar206_scan.py --paper a4 --dpi 300 --rotate 90 --out scan.png --pdf scan.pdf`
   Options: `--paper a4|a3`, `--dpi 150|300|600`, `--source flatbed|adf`,
   `--rotate 0|90|180|270`, `--raw`, `--close` (diagnostics only).
-* `tools/konica206-scan` — desktop wrapper; writes to `~/Scans` and opens
+* `tools/konica206-scan` — desktop wrapper:
+  `konica206-scan [flatbed|adf] [rotation]`, writes to `~/Scans` and opens
   the PDF. Symlinked as `~/.local/bin/konica206-scan`.
-* JWM: "PDF and Scanning" → "Konica 206 Scan (A4 mono)".
+* JWM: "PDF and Scanning" → "Konica 206 Scan (flatbed A4)" and
+  "Konica 206 ADF Scan (A4)".
 
 ### Verified artifacts
 
@@ -397,13 +399,34 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
 * `probe/pdf-scan-fixed.pdf` — upright A4 PDF (pdfinfo: 1 page, 841.68×595.2 pts).
 * `probe/round13-scan-full.bin` — raw 1,795,584-byte capture.
 
+### ADF scan
+
+A page loaded in the ADF changes the 10-byte status response from
+`ff 00 00 00 00 00 00 00 00 00` to `ff 01 00 00 00 00 00 00 00 00`
+(byte 1 set). The parameter builder tests `[0x1006f2a1] & 1` to select
+byte 12 = 2 for an ADF scan; the exact mapping from raw status byte 1 to
+that variable is not yet proven, but byte 12 = 2 worked.
+
+With `--source adf` (byte 12 = 2) the scan produced the same `4096 × 3507`
+geometry and 1,795,584-byte image as the flatbed. The ADF image is rotated
+the other way from the flatbed test: `--rotate 270` produced upright text,
+while the flatbed page needed `--rotate 90`.
+
+After the ADF scan the status still read `ff 01 …`, even 3 seconds later.
+That may be a latched paper sensor or a page left in the feeder; do not use
+byte 1 alone as an "ADF empty" check until this is understood. A second ADF
+page was not tested.
+
+Artifacts:
+
+* `probe/adf-scan1-upright.png` / `.pdf` — A4 landscape, upright.
+* `probe/adf-scan1.png` — raw orientation (needs 270° CCW).
+* `probe/adf-scan1.bin` — raw capture (git-ignored).
+
 ### Remaining
 
-* ADF: set parameter byte 12 to 2 and verify the status byte
-  `[0x1006f2a1] & 1` indicates paper present. A status query with the ADF
-  empty returned `ff 00 00 00 00 00 00 00 00 00`, so byte 7 is zero; load a
-  page and re-run `tools/ar206_test.py --stage status` before attempting a
-  full ADF scan.
+* ADF multi-page: the current tool scans one page per invocation. The
+  post-scan status latch also needs to be understood before looping pages.
 * A3: the A3 parameter block is accepted. Geometry with
   `01 00 05 00 00 00 00 00 67 1b c1 26 00` returned
   `00 10 60 13 b3 0d 60 13` (line 4096, height 4960, window 3507×4960).
