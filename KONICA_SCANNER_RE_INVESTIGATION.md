@@ -392,6 +392,8 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
   the PDF. Symlinked as `~/.local/bin/konica206-scan`.
 * JWM: "PDF and Scanning" → "Konica 206 Scan (flatbed A4)" and
   "Konica 206 ADF Scan (A4)".
+* `sane/` — `sane-ar206` SANE backend; Simple Scan lists the 206 as
+  "KONICA MINOLTA bizhub 206". See the SANE backend section below.
 
 ### Verified artifacts
 
@@ -424,6 +426,48 @@ Artifacts:
 * `probe/adf-scan1.png` — raw orientation (needs 270° CCW).
 * `probe/adf-scan1.bin` — raw capture (git-ignored).
 
+### SANE backend
+
+`sane/` contains a minimal SANE backend (`sane-ar206`) built on libusb.
+It opens interface 0 only, speaks the same AR206 command sequence, buffers
+one page in `sane_start()`, converts the 1-bit data to 8-bit gray, rotates
+it, and serves it from `sane_read()`. It never sends `03 0a` or
+`03 11 01`, so the USB session stays healthy.
+
+Build and install:
+
+```
+sudo apk add sane-dev libusb-dev build-base
+cd sane
+make
+sudo make install
+```
+
+Installed files:
+
+* `/usr/lib/sane/libsane-ar206.so*`
+* `/etc/sane.d/ar206.conf`
+* `/etc/sane.d/dll.d/ar206`
+
+Options exposed: `resolution` (150/300/600), `mode` (Gray/Lineart),
+`source` (Flatbed/ADF), `paper` (A4/A3), `rotation` (0/90/180/270
+clockwise; flatbed default 90, ADF 270) and a no-op `preview` bool.
+
+Verified:
+
+* `scanimage -L` lists `ar206:ar206:usb:132b:232b` alongside
+  `epsonds:net:192.168.1.19`; the Epson path is unchanged.
+* `simple-scan -d` reports both devices, including the bizhub 206.
+* Flatbed through `scanimage` at 150 dpi (`1753 × 1240`) and 300 dpi
+  (`3507 × 2480`), 8-bit gray PNG.
+* ADF with no paper returns `SANE_STATUS_NO_DOCS` (`ff 00 …`); with a page
+  it scans (`ff 01 …`) and is upright with `--rotation 270`.
+* The earlier post-scan status latch cleared by the time of the SANE test,
+  confirming status byte 1 is the ADF paper-present bit.
+
+The backend scans one page per `sane_start()`; multi-page ADF looping is
+not implemented yet.
+
 ### Remaining
 
 * ADF multi-page: the current tool scans one page per invocation. The
@@ -431,6 +475,6 @@ Artifacts:
 * A3: the A3 parameter block is accepted. Geometry with
   `01 00 05 00 00 00 00 00 67 1b c1 26 00` returned
   `00 10 60 13 b3 0d 60 13` (line 4096, height 4960, window 3507×4960).
-  A full A3 scan has not been run yet.
-* Simple Scan/SANE: the 206 is not visible to SANE. A `sane-ar206` backend
-  would be needed for Simple Scan integration; the current tool is standalone.
+  A full A3 scan has not been run yet, through either the CLI or SANE.
+* Simple Scan: verify a GUI scan of the 206 in JWM; the backend is listed
+  but the GUI scan path has not been exercised.

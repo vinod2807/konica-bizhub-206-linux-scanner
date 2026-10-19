@@ -4,3 +4,6 @@ captures/*.pcap
 __pycache__/
 *.pyc
 probe/*.bin
+sane/*.o
+sane/*.so
+sane/*.so.*
