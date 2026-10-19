@@ -461,7 +461,10 @@ Verified:
 * Flatbed through `scanimage` at 150 dpi (`1753 × 1240`) and 300 dpi
   (`3507 × 2480`), 8-bit gray PNG.
 * ADF with no paper returns `SANE_STATUS_NO_DOCS` (`ff 00 …`); with a page
-  it scans (`ff 01 …`) and is upright with `--rotation 270`.
+  it scans (`ff 01 …`) and is upright with `--rotation 270`
+  (`probe/sane-adf-150.png`).
+* A3 flatbed at 150 dpi: window `1753 × 2480`, output `2480 × 1753`
+  (`probe/sane-a3-150.png`).
 * The earlier post-scan status latch cleared by the time of the SANE test,
   confirming status byte 1 is the ADF paper-present bit.
 
@@ -472,9 +475,8 @@ not implemented yet.
 
 * ADF multi-page: the current tool scans one page per invocation. The
   post-scan status latch also needs to be understood before looping pages.
-* A3: the A3 parameter block is accepted. Geometry with
-  `01 00 05 00 00 00 00 00 67 1b c1 26 00` returned
-  `00 10 60 13 b3 0d 60 13` (line 4096, height 4960, window 3507×4960).
-  A full A3 scan has not been run yet, through either the CLI or SANE.
+* A3: full A3 at 150 dpi is verified through SANE. 300 and 600 dpi A3
+  have not been run (the A3 300 dpi parameter block was accepted earlier:
+  geometry `00 10 60 13 b3 0d 60 13`).
 * Simple Scan: verify a GUI scan of the 206 in JWM; the backend is listed
   but the GUI scan path has not been exercised.
