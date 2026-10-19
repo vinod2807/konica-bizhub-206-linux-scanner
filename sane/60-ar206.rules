@@ -1,0 +1,16 @@
+# Konica Minolta bizhub 206 - grant SANE access to the USB device node.
+#
+# The 206 exposes two interfaces on one USB device node (132b:232b):
+# interface 0 is the vendor-specific scanner, interface 1 is bound to
+# usblp (printing).  By default the node is root:lp; this rule hands it
+# to the "scanner" group so saned (and desktop users in that group) can
+# open interface 0 without root.
+#
+# Install (Debian/Ubuntu):
+#   sudo install -m 644 60-ar206.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload && sudo udevadm trigger
+#   sudo adduser "$USER" scanner
+#
+# Then unplug/replug the scanner (or reboot) so the node is re-tagged.
+
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="132b", ATTRS{idProduct}=="232b", MODE="0660", GROUP="scanner", ENV{libsane_matched}="yes"

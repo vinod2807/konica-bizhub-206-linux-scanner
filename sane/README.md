@@ -9,8 +9,21 @@ rotates it, and serves it to the frontend from `sane_read()`.
 
 ## Build
 
+The backend is plain C using only SANE + libusb, so it builds on any
+distro.  It was developed on Alpine (musl); Debian/Ubuntu (glibc) work
+too.
+
+Alpine:
+
 ```sh
 sudo apk add sane-dev libusb-dev build-base
+make
+```
+
+Debian / Ubuntu:
+
+```sh
+sudo apt install libsane-dev libusb-1.0-0-dev build-essential
 make
 ```
 
@@ -22,12 +35,31 @@ sudo make install
 
 This installs:
 
-* `/usr/lib/sane/libsane-ar206.so*`
+* `libsane-ar206.so*` into the SANE backend dir
 * `/etc/sane.d/ar206.conf`
 * `/etc/sane.d/dll.d/ar206`
 
+The Makefile auto-detects the backend directory: `/usr/lib/sane` on
+Alpine, `/usr/lib/<triplet>/sane` (e.g. `/usr/lib/x86_64-linux-gnu/sane`)
+on Debian/Ubuntu.  Override with `make SANE_LIBDIR=/path/to/sane` if
+needed; `DESTDIR` is honoured for packaging.
+
 The existing `epsonds` (Epson L3260) entry is left alone; both backends
 are loaded by SANE.
+
+### Debian / Ubuntu: USB permissions
+
+Unlike Alpine (where the `lp` group owns the node), Debian/Ubuntu use
+udev.  Install the bundled rule and add yourself to the `scanner` group:
+
+```sh
+sudo make install-udev            # /etc/udev/rules.d/60-ar206.rules
+sudo udevadm control --reload && sudo udevadm trigger
+sudo adduser "$USER" scanner
+```
+
+Replug the scanner (or reboot) so the node is re-tagged, then
+`scanimage -L` should list `ar206:ar206:usb:132b:232b`.
 
 ## Use
 
@@ -55,17 +87,27 @@ NAPS2 -> bundled libsane -> net backend -> localhost:6566
       -> saned (host) -> ar206 backend -> libusb -> USB 206
 ```
 
-Run `tools/setup-naps2.sh` to configure this.  It:
+Run `tools/setup-naps2.sh` to configure this.  It detects the distro
+(Alpine/OpenRC + `apk`, or Debian/Ubuntu/systemd + `apt`) and:
 
-* installs `sane-saned` and `sane-backend-net`;
-* adds the `saned` user to the `lp` group (the USB node is `root:lp`);
+* installs saned and the net backend (`sane-saned` + `sane-backend-net`
+  on Alpine; `sane-utils` on Debian/Ubuntu);
+* grants the unprivileged `saned` user USB access (adds it to `lp` on
+  Alpine, or installs the udev rule and adds it to `scanner` on
+  Debian/Ubuntu);
 * allows only `localhost`/`127.0.0.1` in `/etc/sane.d/saned.conf`;
-* enables and starts the `saned` OpenRC service;
+* enables and starts saned (`rc-service` on Alpine, `saned.socket` on
+  Debian/Ubuntu);
 * copies NAPS2's bundled `sane.d` to
   `~/.var/app/com.naps2.Naps2/config/sane` and uncomments `localhost`
   in its `net.conf`;
 * sets `SANE_CONFIG_DIR` for the app via
   `flatpak override --user`.
+
+If NAPS2 is installed **natively** (the `.deb`/AppImage from naps2.com)
+rather than as a flatpak, no bridge is needed at all: it links against
+the system SANE and sees `ar206:ar206:usb:132b:232b` directly.  The
+script prints a note and exits in that case.
 
 In NAPS2 the scanner appears in **Profile Settings -> Choose device** as
 **bizhub 206 (net)** (device id `net:localhost:ar206:ar206:usb:132b:232b`).

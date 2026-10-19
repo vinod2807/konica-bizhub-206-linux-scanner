@@ -511,6 +511,23 @@ disturbed):
 The Epson profile remains the default; the host `ar206`, `epsonds` and
 print paths are unaffected.  saned only claims interface 0 during a scan.
 
+### Portability (Debian / Ubuntu)
+
+The protocol work is OS-independent: `sane/ar206.c` uses only SANE +
+libusb, and the Python tools use pyusb.  Porting is packaging only:
+
+* **Makefile** now auto-detects the backend dir (`/usr/lib/sane` on
+  Alpine, `/usr/lib/<triplet>/sane` on Debian/Ubuntu), honours `DESTDIR`,
+  and has an `install-udev` target.
+* **`sane/60-ar206.rules`** hands the `132b:232b` node to the `scanner`
+  group (Debian/Ubuntu use udev, not the `lp` group).
+* **`tools/setup-naps2.sh`** is now distro-neutral: it picks `apk`/OpenRC
+  or `apt`/systemd (`saned.socket`) automatically.
+* Native (deb/AppImage) NAPS2 needs no saned bridge at all — it uses
+  system SANE directly.  Only the Flatpak needs the bridge.
+* Build deps on Debian/Ubuntu: `libsane-dev libusb-1.0-0-dev
+  build-essential` (plus `python3-usb` for the CLI).
+
 ### Remaining
 
 * ADF multi-page: the current tool scans one page per invocation. The
