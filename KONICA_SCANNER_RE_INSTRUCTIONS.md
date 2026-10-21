@@ -256,6 +256,11 @@ These come from reverse engineering and hard-won testing:
 | `KONICA_SCANNER_RE_INVESTIGATION.md` | full reverse-engineering log (protocol, command map, rounds) |
 | `KONICA_SCANNER_RE_INSTRUCTIONS.md` | this file |
 
+> **Do not commit scans of personal documents.**  Scans made while developing
+> this driver were of an Aadhaar letter; those files were purged from this
+> repository's history on 2026-10-21.  Use a blank sheet or a synthetic test
+> page for test captures.
+
 ### Low-level tools (advanced)
 
 * `tools/usb_probe.py` — one-shot write/read probe of interface 0.

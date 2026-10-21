@@ -401,9 +401,17 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
 
 ### Verified artifacts
 
-* `probe/reuse-scan1.png`, `probe/reuse-scan2.png` — two consecutive scans.
-* `probe/pdf-scan-fixed.pdf` — upright A4 PDF (pdfinfo: 1 page, 841.68×595.2 pts).
-* `probe/round13-scan-full.bin` — raw 1,795,584-byte capture.
+* `probe/adf-scan1.png`, `probe/adf-scan1-upright.png` — ADF scans, raw and
+  rotated 270°.
+* `probe/sane-a3-150.png` — A3 flatbed scan (1753×2480).
+* `probe/adf-scan1.bin` — raw 1,795,584-byte capture.
+
+> The test sheets used during development were personal documents.  The
+> rendered scans and raw dumps of those (`probe/round13-scan-a4*.png`,
+> `probe/reuse-scan*.png`, `probe/pdf-scan*`, `probe/pdf-preview*`,
+> `probe/crop-c*.png`, `probe/round13-scan-full.bin`) were removed from this
+> repository's history on 2026-10-21; the findings they supported are kept
+> above.  Use a synthetic test page for any further captures.
 
 ### ADF scan
 
