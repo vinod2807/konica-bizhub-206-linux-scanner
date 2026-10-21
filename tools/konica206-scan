@@ -1,13 +1,13 @@
 #!/bin/sh
 # Desktop wrapper for the Konica Minolta bizhub 206 USB scanner.
 # Usage: konica206-scan [flatbed|adf] [rotation]
-#   flatbed  A4, 300 dpi, default rotation 90
-#   adf      A4, 300 dpi, default rotation 270
+#   flatbed  A4, 300 dpi, default rotation 0 (page lying flat comes out upright)
+#   adf      A4, 300 dpi, default rotation 270 (the feeder scans the sheet sideways)
 set -u
 
 SOURCE="${1:-flatbed}"
 case "$SOURCE" in
-    flatbed) ROTATE="${2:-90}" ;;
+    flatbed) ROTATE="${2:-0}" ;;
     adf)     ROTATE="${2:-270}" ;;
     *)
         echo "usage: $0 [flatbed|adf] [0|90|180|270]" >&2

@@ -66,7 +66,7 @@ Replug the scanner (or reboot) so the node is re-tagged, then
 ```sh
 scanimage -L
 scanimage -d ar206:ar206:usb:132b:232b \
-    --resolution 300 --source Flatbed --paper A4 --rotation 90 \
+    --resolution 300 --source Flatbed --paper A4 --rotation 0 \
     -o flatbed.png
 scanimage -d ar206:ar206:usb:132b:232b \
     --resolution 300 --source ADF --paper A4 --rotation 270 \
@@ -122,7 +122,7 @@ the backend does not support 100 dpi or color.
 | `--mode` | `Gray`, `Lineart` | `Gray` |
 | `--source` | `Flatbed`, `ADF` | `Flatbed` |
 | `--paper` | `A4`, `A3` | `A4` |
-| `--rotation` | `0`, `90`, `180`, `270` (clockwise) | `90` flatbed / `270` ADF |
+| `--rotation` | `0`, `90`, `180`, `270` (clockwise) | `0` flatbed / `270` ADF |
 | `--preview` | `yes`, `no` | `no` (currently ignored) |
 
 ## Notes

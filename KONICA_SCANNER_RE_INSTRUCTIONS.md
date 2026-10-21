@@ -42,7 +42,7 @@ sudo apk add python3 py3-usb
 sudo apt install python3 python3-usb
 
 cd konica-scanner-re
-python3 tools/ar206_scan.py --source flatbed --paper a4 --dpi 300 --rotate 90 --out page.png
+python3 tools/ar206_scan.py --source flatbed --paper a4 --dpi 300 --rotate 0 --out page.png
 ```
 
 If your user cannot open the USB device, see the permissions section for
@@ -62,7 +62,13 @@ a kernel driver is bound to it.
 | `--raw` | path | — | optional raw mono dump |
 | `--close` | flag | off | sends `03 11 01`; **diagnostics only** (see §8) |
 
-For an upright page: flatbed `--rotate 90`, ADF `--rotate 270`.
+For an upright page: flatbed `--rotate 0`, ADF `--rotate 270`.
+
+The flatbed scan window is portrait (210 mm across x 297 mm deep), so a sheet
+lying flat on the glass is already upright and needs no rotation.  Use
+`--rotate 90` only if you deliberately place the sheet **sideways** on the
+glass (the scan window then crops it).  The ADF feeds the sheet turned on its
+side, hence 270.
 
 ### Desktop wrapper
 
@@ -134,7 +140,7 @@ Scan directly:
 
 ```sh
 scanimage -d ar206:ar206:usb:132b:232b \
-    --resolution 300 --mode Gray --source Flatbed --paper A4 --rotation 90 \
+    --resolution 300 --mode Gray --source Flatbed --paper A4 --rotation 0 \
     -o flatbed.png
 
 scanimage -d ar206:ar206:usb:132b:232b \
@@ -152,7 +158,7 @@ Simple Scan lists it as **KONICA MINOLTA bizhub 206**.
 | `--mode` | `Gray`, `Lineart` | `Gray` |
 | `--source` | `Flatbed`, `ADF` | `Flatbed` |
 | `--paper` | `A4`, `A3` | `A4` |
-| `--rotation` | `0`, `90`, `180`, `270` (clockwise) | `90` flatbed / `270` ADF |
+| `--rotation` | `0`, `90`, `180`, `270` (clockwise) | `0` flatbed / `270` ADF |
 | `--preview` | `yes`, `no` | `no` (currently ignored) |
 
 Both `Gray` and `Lineart` produce 8-bit grayscale (the unit is monochrome).
@@ -232,7 +238,7 @@ These come from reverse engineering and hard-won testing:
 | `scanimage -L` doesn't show it | backend not installed / wrong `SANE_LIBDIR`; check `/etc/sane.d/dll.d/ar206` |
 | Permission denied opening USB | join `lp` (Alpine) or `scanner` + udev rule (Debian/Ubuntu); log out/in |
 | ADF returns `NO_DOCS` | feeder empty — status byte 1 is the paper-present bit |
-| Image sideways | wrong `--rotate`/`--rotation` (flatbed 90, ADF 270) |
+| Image sideways | wrong `--rotate`/`--rotation` (flatbed 0, ADF 270).  A flatbed sheet lying flat is already upright — if it comes out sideways the sheet was placed sideways on the glass |
 | NAPS2 flatpak doesn't list it | `saned` not running, or `SANE_CONFIG_DIR` override missing — rerun `tools/setup-naps2.sh` |
 | Everything hangs after an experiment | power-cycle the scanner (see §5) |
 

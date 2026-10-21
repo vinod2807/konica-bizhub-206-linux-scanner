@@ -198,7 +198,7 @@ static const SANE_Option_Descriptor option_descriptors[NUM_OPTIONS] = {
   {
     .name = "rotation",
     .title = "Rotation",
-    .desc = "Rotate the output clockwise.  Flatbed defaults to 90, ADF to 270.",
+    .desc = "Rotate the output clockwise.  Flatbed defaults to 0 (the scan window is already portrait), ADF to 270.",
     .type = SANE_TYPE_INT,
     .unit = SANE_UNIT_NONE,
     .size = sizeof (SANE_Int),
@@ -688,7 +688,10 @@ sane_open (SANE_String_Const devicename, SANE_Handle *handle)
   h->mode = MODE_GRAY;
   h->source = SOURCE_FLATBED;
   h->paper = PAPER_A4;
-  h->rotation = 90;
+  /* The flatbed scan window is already portrait (210mm across x 297mm deep),
+     so a page lying on the glass comes out upright with no rotation.  The
+     ADF feeds the sheet turned on its side, hence 270 there.  */
+  h->rotation = 0;
   h->preview = SANE_FALSE;
   h->active = SANE_FALSE;
   h->have_params = SANE_FALSE;
@@ -794,7 +797,7 @@ sane_control_option (SANE_Handle handle, SANE_Int option, SANE_Action action,
       if (index < 0)
         return SANE_STATUS_INVAL;
       h->source = index;
-      h->rotation = (index == SOURCE_ADF) ? 270 : 90;
+      h->rotation = (index == SOURCE_ADF) ? 270 : 0;
       h->have_params = SANE_FALSE;
       if (info != NULL)
         *info |= SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS;

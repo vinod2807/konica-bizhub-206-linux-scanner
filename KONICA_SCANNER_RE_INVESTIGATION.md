@@ -376,9 +376,13 @@ command omitted, two back-to-back scans succeeded without a power-cycle.
 * The requested A4 window is the first 2480 pixels (310 bytes) of each row;
   the remaining 1616 pixels are padding/background.
 * Bits are MSB-first, **1 = black**, 0 = white.
-* The test page was placed with its long side along the scan direction, so
-  the raw image is the page rotated 90° counter-clockwise. A 90° clockwise
-  rotation produced upright text.
+* The test sheet was placed **sideways** on the glass (its long edge along the
+  210 mm axis), so the raw image is the sheet rotated 90° counter-clockwise and
+  cropped at one edge.  A 90° clockwise rotation produced upright text.
+* The scan window itself is portrait: 210 mm across (X, 2480 px at 300 dpi)
+  x 297 mm deep (Y, 3507 rows).  A sheet lying **flat** on the glass is
+  therefore already upright in the raw and needs **no** rotation; only a sheet
+  placed sideways needs 90°.
 * Output: 3507×2480 grayscale PNG/PDF, A4 landscape.
 
 ### Working tools
@@ -410,9 +414,10 @@ byte 12 = 2 for an ADF scan; the exact mapping from raw status byte 1 to
 that variable is not yet proven, but byte 12 = 2 worked.
 
 With `--source adf` (byte 12 = 2) the scan produced the same `4096 × 3507`
-geometry and 1,795,584-byte image as the flatbed. The ADF image is rotated
-the other way from the flatbed test: `--rotate 270` produced upright text,
-while the flatbed page needed `--rotate 90`.
+geometry and 1,795,584-byte image as the flatbed. The ADF feeds the sheet
+turned on its side, so its raw image is the flatbed raw rotated the other way:
+`--rotate 270` produced upright text, while a flatbed sheet lying flat needs
+`--rotate 0`.
 
 Immediately after the ADF scan the status still read `ff 01 …`, but by the
 time of the SANE tests it had cleared to `ff 00 …`; byte 1 is the ADF
@@ -451,7 +456,14 @@ Installed files:
 
 Options exposed: `resolution` (150/300/600), `mode` (Gray/Lineart),
 `source` (Flatbed/ADF), `paper` (A4/A3), `rotation` (0/90/180/270
-clockwise; flatbed default 90, ADF 270) and a no-op `preview` bool.
+clockwise; flatbed default 0, ADF 270) and a no-op `preview` bool.
+
+> The flatbed default was originally 90, derived from a test sheet that had
+> been placed **sideways** on the glass.  Because the scan window is already
+> portrait, that default turned every normally-placed sheet sideways in every
+> consumer (NAPS2, Simple Scan, `scanimage`).  Changed to 0 in the commit
+> "Fix flatbed rotation default"; ADF keeps 270 because the feeder scans the
+> sheet turned on its side.
 
 Verified:
 
